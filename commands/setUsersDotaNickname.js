@@ -1,4 +1,5 @@
 const User = require('../Database/User')
+const Guild = require('../Database/Guild')
 
 const setUsersDotaNickname = async (message, body) => {
     if (!message.member.hasPermission('ADMINISTRATOR')) {
@@ -12,7 +13,13 @@ const setUsersDotaNickname = async (message, body) => {
     body.shift()
     const bodyStr = body.join(' ').trim()
     const idToSet = message.mentions.users.first().id
+    console.log(idToSet)
+    const guildObj = await Guild.findOne({
+        guildID: message.guild.id
+    })
+    console.log(guildObj)
     await User.findOneAndUpdate({
+        guildID: guildObj._id,
         discordID: idToSet
     }, {
         dotaNickname: bodyStr

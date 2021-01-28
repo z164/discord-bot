@@ -1,4 +1,5 @@
 const User = require('../Database/User')
+const Guild = require('../Database/Guild')
 
 const getUsersDotaNickname = async (message) => {
     if(!message.mentions.users.first()) {
@@ -6,7 +7,12 @@ const getUsersDotaNickname = async (message) => {
         return
     }
     const idToGet = message.mentions.users.first().id
+    const guildObj = await Guild.findOne({
+        guildID: message.guild.id
+    })
+    console.log(guildObj)
     const user = await User.findOne({
+        guildID: guildObj._id,
         discordID: idToGet
     })
     if (user === null) {

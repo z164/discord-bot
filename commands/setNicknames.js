@@ -1,9 +1,11 @@
 const axios = require('axios');
 
 const User = require('../Database/User')
+const Guild = require('../Database/Guild')
 
-const setNicknames = async (message) => {
-    if (!message.member.hasPermission('ADMINISTRATOR')) {
+
+const setNicknames = async (client, guildID, message = null) => {
+    if (message !== null && !message.member.hasPermission('ADMINISTRATOR')) {
         message.channel.send('You need administrator permissions on server to do this')
         return
     }
@@ -12,13 +14,34 @@ const setNicknames = async (message) => {
             const {
                 data
             } = response
-            const users = await User.find({})
+            const guildObj = await Guild.findOne({
+                guildID: guildID
+            })
+            if (!guildObj) {
+                console.log('No guild found')
+                return
+            }
+            const users = await User.find({
+                guildID: guildObj._id
+            })
+            let currentGuild
+            try {
+                currentGuild = await client.guilds.fetch(guildID)
+            } catch {
+                const intervals = require('./utility/intervals') // i have literally no idea, why doesnt it work outside of this block, but im done.
+                await Guild.findOneAndDelete({
+                    guildID: guildID
+                })
+                console.log(`Couldnt reach ${guildID} guild, removing it from database and clearing interval`)
+                intervals.removeInterval(guildID)
+                return
+            }
+            // console.log(currentGuild)
             users.forEach(user => {
                 const player = data.leaderboard.find(el => {
                     return el.name.toLowerCase() === user.dotaNickname.toLowerCase();
                 });
-
-                message.guild.members.fetch(user.discordID)
+                currentGuild.members.fetch(user.discordID)
                     .then((response) => {
                         try {
                             if (player) {

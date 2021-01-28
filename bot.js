@@ -9,10 +9,17 @@ const setUsersDotaNickname = require('./commands/setUsersDotaNickname')
 const getUsersDotaNickname = require('./commands/getUsersDotaNickname')
 const help = require('./commands/help')
 
+const Guild = require('./Database/Guild')
+
+const intervals = require('./commands/utility/intervals')
+
 require('dotenv').config()
 
 const client = new discord.Client()
 client.login(process.env.BOT_TOKEN)
+    .then(() => {
+        console.log('Bot logged in')
+    })
 
 mongoose.connect(process.env.URI, {
     useNewUrlParser: true,
@@ -33,10 +40,10 @@ const messageHandle = async (message) => {
     console.log(message.content.split(' '))
     switch (command) {
         case 'register':
-            register(message, body)
+            register(client, message, body)
             break
         case 'update':
-            setNicknames(message)
+            setNicknames(client, message.guild.id, message)
             break
         case 'edit':
             editOwnDotaNickname(body, message)
@@ -62,4 +69,13 @@ const messageHandle = async (message) => {
     }
 }
 
+const curry = (client, guildID) => {
+    return () => setNicknames(client, guildID)
+}
+
 client.on('message', messageHandle)
+
+client.on('ready', async () => {
+    const guilds = await Guild.find({})
+    guilds.forEach(guild => intervals.createInterval(client, guild.guildID))
+})
