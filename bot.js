@@ -9,9 +9,8 @@ const setUsersDotaNickname = require('./commands/setUsersDotaNickname')
 const getUsersDotaNickname = require('./commands/getUsersDotaNickname')
 const help = require('./commands/help')
 
-const Guild = require('./Database/Guild')
-
-const intervals = require('./commands/utility/intervals')
+const interval = require('./commands/utility/interval')
+const guildDelete = require('./commands/utility/guildDelete')
 
 require('dotenv').config()
 
@@ -69,13 +68,12 @@ const messageHandle = async (message) => {
     }
 }
 
-const curry = (client, guildID) => {
-    return () => setNicknames(client, guildID)
-}
-
 client.on('message', messageHandle)
 
 client.on('ready', async () => {
-    const guilds = await Guild.find({})
-    guilds.forEach(guild => intervals.createInterval(client, guild.guildID))
+    setInterval(() => interval(client), 3600000)
+})
+
+client.on('guildDelete', async (guild) => {
+    await guildDelete(guild.id)
 })

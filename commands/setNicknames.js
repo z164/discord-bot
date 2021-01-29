@@ -17,10 +17,6 @@ const setNicknames = async (client, guildID, message = null) => {
             const guildObj = await Guild.findOne({
                 guildID: guildID
             })
-            if (!guildObj) {
-                console.log('No guild found')
-                return
-            }
             const users = await User.find({
                 guildID: guildObj._id
             })
@@ -28,15 +24,12 @@ const setNicknames = async (client, guildID, message = null) => {
             try {
                 currentGuild = await client.guilds.fetch(guildID)
             } catch {
-                const intervals = require('./utility/intervals') // i have literally no idea, why doesnt it work outside of this block, but im done.
                 await Guild.findOneAndDelete({
                     guildID: guildID
                 })
-                console.log(`Couldnt reach ${guildID} guild, removing it from database and clearing interval`)
-                intervals.removeInterval(guildID)
+                console.log(`Couldnt reach ${guildID} guild, removing it from database`)
                 return
             }
-            // console.log(currentGuild)
             users.forEach(user => {
                 const player = data.leaderboard.find(el => {
                     return el.name.toLowerCase() === user.dotaNickname.toLowerCase();
@@ -46,6 +39,7 @@ const setNicknames = async (client, guildID, message = null) => {
                         try {
                             if (player) {
                                 response.setNickname(`${user.nickname} [${player.rank}]`, 'Nickname changed due to rank update');
+                                console.log(`Updated ${user.nickname}'s rank to ${player.rank}\n(Guild: ${guildObj.name}:${guildObj.guildID}\n)`)
                             } else {
                                 response.setNickname(`${user.nickname}`, 'This player is not present on leaderboards')
                             }

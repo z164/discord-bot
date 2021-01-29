@@ -1,7 +1,6 @@
 const User = require('../Database/User')
 const Guild = require('../Database/Guild')
 
-const intervals = require('../commands/utility/intervals')
 
 const register = async (client, message, body) => {
     let discordID = message.member.user.id
@@ -26,7 +25,6 @@ const register = async (client, message, body) => {
             guildID: guildID,
             name: guildName
         })
-        intervals.createInterval(client, guildID)
     }
     const user = await User.findOne({
         guildID: guildObj._id,
