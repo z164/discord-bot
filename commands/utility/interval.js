@@ -1,12 +1,14 @@
-const setNicknames = require('../setNicknames') 
+"use strict";
 
-const Guild = require('../../Database/Guild')
+const setNicknames = require("../setNicknames");
 
-const interval = async (client) => {
-    const guilds = await Guild.find({})
+const Guild = require("../../Database/Guild");
+
+const interval = async client => {
+    const guilds = await Guild.find({});
     guilds.forEach(el => {
-        setNicknames(client, el.guildID)
-    })
-}
+        setNicknames(client, el.guildID);
+    });
+};
 
-module.exports = interval
+module.exports = interval;
