@@ -1,8 +1,13 @@
 const User = require('../Database/User')
 const Guild = require('../Database/Guild')
 
+const logUtilities = require('./utility/logUtilities')
+
 const getUsersDotaNickname = async (message) => {
+    logUtilities.title('Get')
     if(!message.mentions.users.first()) {
+        console.log('No user was mentioned'.error)
+        console.log(logUtilities.separator)
         message.channel.send('No user mentioned')
         return
     }
@@ -16,9 +21,12 @@ const getUsersDotaNickname = async (message) => {
         discordID: idToGet
     })
     if (user === null) {
+        console.log('Mentioned user is not registered in system'.error)
+        console.log(logUtilities.separator)
         message.channel.send(`This user is not registered in system`)
         return
     }
+    console.log(`${user.nickname.nicknameStyle}'s Dota 2 nickname is ${user.dotaNickname.nicknameStyle}`.log)
     message.channel.send(`${user.nickname}'s Dota 2 nickname is ${user.dotaNickname}`)
 }
 

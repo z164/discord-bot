@@ -1,6 +1,8 @@
 const discord = require('discord.js');
 const mongoose = require('mongoose');
 
+const logUtilities = require('./commands/utility/logUtilities')
+
 const register = require('./commands/register')
 const setNicknames = require('./commands/setNicknames')
 const editOwnDotaNickname = require('./commands/editOwnDotaNickname')
@@ -36,10 +38,17 @@ const messageHandle = async (message) => {
     if (prefix !== process.env.prefix) {
         return
     }
-    console.log(message.content.split(' '))
+    logUtilities.title('Recieve')
+    console.log(`${'Command'.property}: ${command}`)
+    body.join(' ').trim() === '' ? '' : console.log(`${'Body'.property}: ${body.join(' ').trim()}`)
+    console.log(`${'Location'.property}: ${message.guild.name}`)
+    console.log(`${'ID'.property}: ${message.guild.id}`)
+    console.log(`${'Author'.property}: ${message.member.nickname}`)
+    console.log(`${'ID'.property}: ${message.author.id}`)
+    console.log(logUtilities.separator)
     switch (command) {
         case 'register':
-            register(client, message, body)
+            register(message, body)
             break
         case 'update':
             setNicknames(client, message.guild.id, message)

@@ -3,9 +3,13 @@ const axios = require('axios');
 const User = require('../Database/User')
 const Guild = require('../Database/Guild')
 
+const logUtilities = require('./utility/logUtilities')
 
 const setNicknames = async (client, guildID, message = null) => {
+    logUtilities.title('Update')
     if (message !== null && !message.member.hasPermission('ADMINISTRATOR')) {
+        console.log('Update was invoked by non-administrator user'.error)
+        console.log(logUtilities.separator)
         message.channel.send('You need administrator permissions on server to do this')
         return
     }
@@ -27,27 +31,34 @@ const setNicknames = async (client, guildID, message = null) => {
                 await Guild.findOneAndDelete({
                     guildID: guildID
                 })
-                console.log(`Couldnt reach ${guildID} guild, removing it from database`)
+                console.log(`Couldnt reach ${guildID.nicknameStyle} guild, removing it from database`.error)
+                console.log(logUtilities.separator)
                 return
             }
             users.forEach(user => {
                 const player = data.leaderboard.find(el => {
                     return el.name.toLowerCase() === user.dotaNickname.toLowerCase();
-                });
+                })
                 currentGuild.members.fetch(user.discordID)
                     .then((response) => {
                         try {
                             if (player) {
                                 response.setNickname(`${user.nickname} [${player.rank}]`, 'Nickname changed due to rank update');
-                                console.log(`Updated ${user.nickname}'s rank to ${player.rank}\n(Guild: ${guildObj.name}:${guildObj.guildID}\n)`)
+                                console.log(`${user.nickname.nicknameStyle}'s rank was updated to ${String(player.rank).nicknameStyle}`.log)
+                                if (message === null) {
+                                    console.log(`${'Guild'.property}: ${guildObj.name}`)
+                                    console.log(`${'ID'.property}: ${guildObj.guildID}`)
+                                }
+
                             } else {
+                                console.log(`${user.nickname.nicknameStyle} is not present on leaderboards. Reseting his nickname`.warning)
                                 response.setNickname(`${user.nickname}`, 'This player is not present on leaderboards')
                             }
                         } catch (err) {
-                            console.log('I cant change server owner`s nickname :(')
+                            console.log(`Somehow server owner's nickname was tried to change`.error)
                         }
                     })
-            });
+            })
         })
 }
 
