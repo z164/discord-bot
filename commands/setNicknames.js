@@ -1,45 +1,45 @@
-"use strict";
+'use strict';
 
-const axios = require("axios");
+const axios = require('axios');
 
-const User = require("../Database/User");
-const Guild = require("../Database/Guild");
+const User = require('../Database/User');
+const Guild = require('../Database/Guild');
 
-const logUtilities = require("./utility/logUtilities");
+const logUtilities = require('./utility/logUtilities');
 
 const setNicknames = async (client, guildID, message = null) => {
-    logUtilities.title("Update");
+    logUtilities.title('Update');
     if (
-        message !== null &&
-        !message.member.hasPermission("ADMINISTRATOR")
+        message !== null
+        && !message.member.hasPermission('ADMINISTRATOR')
     ) {
         console.log(
-            "Update was invoked by non-administrator user".error
+            'Update was invoked by non-administrator user'.error
         );
         console.log(logUtilities.separator);
         message.channel.send(
-            "You need administrator permissions on server to do this"
+            'You need administrator permissions on server to do this'
         );
         return;
     }
     axios
         .get(
-            "http://www.dota2.com/webapi/ILeaderboard/GetDivisionLeaderboard/v0001?division=europe&leaderboard=0"
+            'http://www.dota2.com/webapi/ILeaderboard/GetDivisionLeaderboard/v0001?division=europe&leaderboard=0'
         )
         .then(async response => {
             const { data } = response;
             const guildObj = await Guild.findOne({
-                guildID: guildID,
+                guildID: guildID
             });
             const users = await User.find({
-                guildID: guildObj._id,
+                guildID: guildObj._id
             });
             let currentGuild;
             try {
                 currentGuild = await client.guilds.fetch(guildID);
             } catch {
                 await Guild.findOneAndDelete({
-                    guildID: guildID,
+                    guildID: guildID
                 });
                 console.log(
                     `Couldnt reach ${guildID.nicknameStyle} guild, removing it from database`
@@ -51,8 +51,8 @@ const setNicknames = async (client, guildID, message = null) => {
             users.forEach(user => {
                 const player = data.leaderboard.find(el => {
                     return (
-                        el.name.toLowerCase() ===
-                        user.dotaNickname.toLowerCase()
+                        el.name.toLowerCase()
+                        === user.dotaNickname.toLowerCase()
                     );
                 });
                 currentGuild.members
@@ -62,7 +62,7 @@ const setNicknames = async (client, guildID, message = null) => {
                             if (player) {
                                 fetchedMember.setNickname(
                                     `${user.nickname} [${player.rank}]`,
-                                    "Nickname changed due to rank update"
+                                    'Nickname changed due to rank update'
                                 );
                                 console.log(
                                     `${
@@ -74,12 +74,12 @@ const setNicknames = async (client, guildID, message = null) => {
                                 );
                                 if (message === null) {
                                     console.log(
-                                        `${"Guild".property}: ${
+                                        `${'Guild'.property}: ${
                                             guildObj.name
                                         }`
                                     );
                                     console.log(
-                                        `${"ID".property}: ${
+                                        `${'ID'.property}: ${
                                             guildObj.guildID
                                         }`
                                     );
@@ -91,7 +91,7 @@ const setNicknames = async (client, guildID, message = null) => {
                                 );
                                 fetchedMember.setNickname(
                                     `${user.nickname}`,
-                                    "This player is not present on leaderboards"
+                                    'This player is not present on leaderboards'
                                 );
                             }
                         } catch (err) {

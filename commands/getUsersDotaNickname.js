@@ -1,33 +1,40 @@
-"use strict";
+'use strict';
 
-const User = require("../Database/User");
-const Guild = require("../Database/Guild");
+const User = require('../Database/User');
+const Guild = require('../Database/Guild');
 
-const logUtilities = require("./utility/logUtilities");
+const logUtilities = require('./utility/logUtilities');
 
 const getUsersDotaNickname = async message => {
-    logUtilities.title("Get");
+    logUtilities.title('Get');
     if (!message.mentions.users.first()) {
-        console.log("No user was mentioned".error);
+        console.log('No user was mentioned'.error);
         console.log(logUtilities.separator);
-        message.channel.send("No user mentioned");
+        message.channel.send('No user mentioned');
         return;
     }
-    const idToGet = message.mentions.users.first().id;
+    let idToGet = message.mentions.users.first().id;
+    if (idToGet === message.guild.ownerID) {
+        console.log(
+            "Mentioned user is a guild owner. Using bot's id to proceed"
+                .warning
+        );
+        idToGet = message.guild.me.id;
+    }
     const guildObj = await Guild.findOne({
-        guildID: message.guild.id,
+        guildID: message.guild.id
     });
     console.log(guildObj);
     const user = await User.findOne({
         guildID: guildObj._id,
-        discordID: idToGet,
+        discordID: idToGet
     });
     if (user === null) {
         console.log(
-            "Mentioned user is not registered in system".error
+            'Mentioned user is not registered in system'.error
         );
         console.log(logUtilities.separator);
-        message.channel.send("This user is not registered in system");
+        message.channel.send('This user is not registered in system');
         return;
     }
     console.log(

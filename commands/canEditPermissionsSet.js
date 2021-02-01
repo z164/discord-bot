@@ -1,40 +1,47 @@
-"use strict";
+'use strict';
 
-const User = require("../Database/User");
+const User = require('../Database/User');
 
-const logUtilities = require("./utility/logUtilities");
+const logUtilities = require('./utility/logUtilities');
 
 const canEditPermissionsSet = async (message, parameter) => {
-    logUtilities.title("Lock / Unlock");
-    if (!message.member.hasPermission("ADMINISTRATOR")) {
+    logUtilities.title('Lock / Unlock');
+    if (!message.member.hasPermission('ADMINISTRATOR')) {
         console.log(
-            "Lock / Unlock was invoked by non-administrator user"
+            'Lock / Unlock was invoked by non-administrator user'
                 .error
         );
         console.log(logUtilities.separator);
         message.channel.send(
-            "You need administrator permissions on server to do this"
+            'You need administrator permissions on server to do this'
         );
         return;
     }
-    const idToBan = message.mentions.users.first().id;
+    let idToBan = message.mentions.users.first().id;
+    if (idToBan === message.guild.ownerID) {
+        console.log(
+            "Mentioned user is a guild owner. Using bot's id to proceed"
+                .warning
+        );
+        idToBan = message.guild.me.id;
+    }
     const usertoBan = await User.findOne({
-        discordID: idToBan,
+        discordID: idToBan
     });
     if (usertoBan === null) {
         console.log(
-            "User that was mentioned is not registered".error
+            'User that was mentioned is not registered'.error
         );
         console.log(logUtilities.separator);
-        message.channel.send("User is not registered in system");
+        message.channel.send('User is not registered in system');
         return;
     }
     await User.findOneAndUpdate(
         {
-            discordID: idToBan,
+            discordID: idToBan
         },
         {
-            canEdit: parameter,
+            canEdit: parameter
         },
         (err, res) => {
             if (err) {
@@ -43,15 +50,15 @@ const canEditPermissionsSet = async (message, parameter) => {
                 console.log(
                     `${res.dotaNickname.nicknameStyle} ${
                         parameter
-                            ? "can now edit his nickname"
-                            : "can no longer edit his nickname"
+                            ? 'can now edit his nickname'
+                            : 'can no longer edit his nickname'
                     }`.log
                 );
                 message.channel.send(
                     `${res.dotaNickname} ${
                         parameter
-                            ? "can now edit his nickname"
-                            : "can no longer edit his nickname"
+                            ? 'can now edit his nickname'
+                            : 'can no longer edit his nickname'
                     }`
                 );
             }

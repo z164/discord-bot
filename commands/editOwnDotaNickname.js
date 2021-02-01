@@ -1,55 +1,64 @@
-"use strict";
+'use strict';
 
-const User = require("../Database/User");
+const User = require('../Database/User');
 
-const logUtilities = require("./utility/logUtilities");
+const logUtilities = require('./utility/logUtilities');
 
 const editOwnDotaNickname = async (body, message) => {
-    logUtilities.title("Edit");
-    const bodyStr = body.join(" ").trim();
-    if (bodyStr === "") {
-        console.log("No nickname provided".error);
+    logUtilities.title('Edit');
+    const bodyStr = body.join(' ').trim();
+    const nickname = message.member.nickname ?? message.member.user.username;
+    let discordID = message.member.user.id;
+    if (message.author.id === message.guild.ownerID) {
+        console.log(
+            `${nickname.nicknameStyle} is a guild owner. Using bot's id to proceed`
+                .warning
+        );
+        discordID = message.guild.me.id;
+    }
+    if (bodyStr === '') {
+        console.log('No nickname provided'.error);
         console.log(logUtilities.separator);
-        message.channel.send("No nickname provided");
+        message.channel.send('No nickname provided');
         return;
     }
     const currentUser = await User.findOne({
-        discordID: message.member.user.id,
+        discordID: discordID
     });
     if (currentUser === null) {
         console.log(
-            "User that invoked this command is not registered".error
+            'User that invoked this command is not registered'.error
         );
         console.log(logUtilities.separator);
-        message.channel.send("You are not registered");
+        message.channel.send('You are not registered');
         return;
     }
     if (!currentUser.canEdit) {
         console.log(
-            "User that invoked this command is banned from editing his nickname"
+            'User that invoked this command is banned from editing his nickname'
                 .error
         );
         console.log(logUtilities.separator);
         message.channel.send(
-            "You were banned from editing your nickname"
+            'You were banned from editing your nickname'
         );
         return;
     }
     await User.findOneAndUpdate(
         {
-            discordID: message.member.user.id,
+            discordID: discordID
         },
         {
-            dotaNickname: bodyStr,
+            dotaNickname: bodyStr
         },
         err => {
             if (err) {
                 console.error(err);
             } else {
-                console.log("Nickname successfully updated".log);
+                console.log('Nickname successfully updated'.log);
                 console.log(logUtilities.separator);
                 message.channel.send(
-                    "Your nickname was updated successfully"
+                    'Your nickname was updated successfully'
                 );
             }
         }

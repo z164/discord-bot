@@ -1,4 +1,5 @@
-const { User } = require('discord.js');
+'use strict';
+
 const mongoose = require('mongoose');
 
 const guildSchema = new mongoose.Schema({
@@ -8,6 +9,6 @@ const guildSchema = new mongoose.Schema({
     name: {
         type: String
     }
-})
+});
 
-module.exports = mongoose.model('Guild', guildSchema)
+module.exports = mongoose.model('Guild', guildSchema);

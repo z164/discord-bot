@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-const setNicknames = require("../setNicknames");
+const setNicknames = require('../setNicknames');
 
-const Guild = require("../../Database/Guild");
+const Guild = require('../../Database/Guild');
 
 const interval = async client => {
     const guilds = await Guild.find({});

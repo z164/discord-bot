@@ -1,18 +1,18 @@
-"use strict";
+'use strict';
 
-const User = require("../../Database/User");
-const Guild = require("../../Database/Guild");
+const User = require('../../Database/User');
+const Guild = require('../../Database/Guild');
 
-const logUtilities = require("./logUtilities");
+const logUtilities = require('./logUtilities');
 
 const guildDelete = async guildID => {
-    logUtilities.title("GuildDelete");
+    logUtilities.title('GuildDelete');
     const guild = await Guild.findOneAndDelete({
-        guildID: guildID,
+        guildID: guildID
     });
     if (guild !== null) {
         const res = await User.deleteMany({
-            guildID: guild._id,
+            guildID: guild._id
         });
         console.log(
             `${res.deletedCount} users cleared from ${guild.name}:${guild.guildID}`

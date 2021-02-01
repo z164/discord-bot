@@ -1,16 +1,15 @@
-"use strict";
+'use strict';
 
-const User = require("../Database/User");
-const Guild = require("../Database/Guild");
+const User = require('../Database/User');
+const Guild = require('../Database/Guild');
 
-const logUtilities = require("./utility/logUtilities");
+const logUtilities = require('./utility/logUtilities');
 
 const register = async (message, body) => {
-    logUtilities.title("Register");
+    logUtilities.title('Register');
     let discordID = message.member.user.id;
-    const nickname =
-        message.member.nickname ?? message.member.user.username;
-    const dotaNickname = body.join(" ").trim();
+    const nickname = message.member.nickname ?? message.member.user.username;
+    const dotaNickname = body.join(' ').trim();
     const guildID = message.guild.id;
     const guildName = message.guild.name;
     if (message.author.id === message.guild.ownerID) {
@@ -20,37 +19,37 @@ const register = async (message, body) => {
         );
         discordID = message.guild.me.id;
     }
-    if (dotaNickname === "") {
-        console.log("No nickname provided".error);
+    if (dotaNickname === '') {
+        console.log('No nickname provided'.error);
         console.log(logUtilities.separator);
-        message.channel.send("No nickname provided");
+        message.channel.send('No nickname provided');
         return;
     }
     let guildObj;
     const guild = await Guild.findOne({
-        guildID: guildID,
+        guildID: guildID
     });
     guildObj = guild;
     if (!guild) {
         guildObj = await Guild.create({
             guildID: guildID,
-            name: guildName,
+            name: guildName
         });
         console.log(
-            "Guild did not exist in database, so it was created"
+            'Guild did not exist in database, so it was created'
                 .warning
         );
     } else {
-        console.log("Guild exists in database".log);
+        console.log('Guild exists in database'.log);
     }
     const user = await User.findOne({
         guildID: guildObj._id,
-        discordID: discordID,
+        discordID: discordID
     });
     if (user) {
-        console.log("User is already registered".error);
+        console.log('User is already registered'.error);
         console.log(logUtilities.separator);
-        message.channel.send("You are already registered");
+        message.channel.send('You are already registered');
         return;
     }
     User.create(
@@ -59,7 +58,7 @@ const register = async (message, body) => {
             discordID: discordID,
             nickname: nickname,
             dotaNickname: dotaNickname,
-            canEdit: true,
+            canEdit: true
         },
         err => {
             if (err) {
