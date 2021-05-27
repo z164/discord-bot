@@ -4,8 +4,9 @@
     "description": "",
     "main": "bot.js",
     "scripts": {
-        "start": "node bot.js",
-        "nodemon": "nodemon bot.js"
+        "start": "npx ts-node-dev src/bot.js",
+        "build": "npx tsc --build",
+        "nodemon": "nodemon src/bot.ts"
     },
     "author": "z164",
     "license": "ISC",
@@ -21,6 +22,7 @@
         "eslint": "^7.2.0",
         "eslint-config-airbnb-base": "^14.2.1",
         "eslint-plugin-import": "^2.22.1",
-        "prettier": "^2.2.1"
+        "prettier": "^2.2.1",
+        "ts-node-dev": "^1.1.6"
     }
 }

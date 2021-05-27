@@ -1,21 +1,19 @@
-'use strict';
+import * as discord from 'discord.js'
+import mongoose from 'mongoose'
 
-const discord = require('discord.js');
-const mongoose = require('mongoose');
+import { parse, themes, title, separator } from './commands/utility/logUtilities';
 
-const logUtilities = require('./commands/utility/logUtilities');
+import register from './commands/register';
+import setNicknames from './commands/setNicknames';
+import editOwnDotaNickname from './commands/editOwnDotaNickname';
+import canEditPermissionsSet from './commands/canEditPermissionsSet';
+import setUsersDotaNickname from './commands/setUsersDotaNickname';
+import getUsersDotaNickname from './commands/getUsersDotaNickname';
+import help from './commands/help';
 
-const register = require('./commands/register');
-const setNicknames = require('./commands/setNicknames');
-const editOwnDotaNickname = require('./commands/editOwnDotaNickname');
-const canEditPermissionsSet = require('./commands/canEditPermissionsSet');
-const setUsersDotaNickname = require('./commands/setUsersDotaNickname');
-const getUsersDotaNickname = require('./commands/getUsersDotaNickname');
-const help = require('./commands/help');
-
-const interval = require('./commands/utility/interval');
-const guildDelete = require('./commands/utility/guildDelete');
-const updateNickname = require('./commands/utility/updateNickname');
+import interval from './commands/utility/interval';
+import guildDelete from './commands/utility/guildDelete';
+import updateNickname from './commands/utility/updateNickname';
 
 require('dotenv').config();
 
@@ -25,7 +23,7 @@ client.login(process.env.BOT_TOKEN).then(() => {
 });
 
 mongoose.connect(
-    process.env.URI,
+    process.env.URI || '',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -36,7 +34,7 @@ mongoose.connect(
     }
 );
 
-const messageHandle = async message => {
+const messageHandle = async (message: discord.Message) => {
     if (message.author.bot) {
         return;
     }
@@ -44,18 +42,18 @@ const messageHandle = async message => {
     if (prefix !== process.env.prefix) {
         return;
     }
-    logUtilities.title('Recieve');
-    console.log(`${'Command'.property}: ${command}`);
+    title('Recieve');
+    console.log(`${parse('Command', themes.property)}: ${command}`);
     console.log(
         body.join(' ').trim() === ''
-            ? 'No body provided'.warning
-            : `${'Body'.property}: ${body.join(' ').trim()}`
+            ? parse('No body provided', themes.warning)
+            : `${parse('Body', themes.property)}: ${body.join(' ').trim()}`
     );
-    console.log(`${'Location'.property}: ${message.guild.name}`);
-    console.log(`${'ID'.property}: ${message.guild.id}`);
-    console.log(`${'Author'.property}: ${message.member.nickname}`);
-    console.log(`${'ID'.property}: ${message.author.id}`);
-    console.log(logUtilities.separator);
+    console.log(`${parse('Location', themes.property)}: ${message.guild.name}`);
+    console.log(`${parse('ID', themes.property)}: ${message.guild.id}`);
+    console.log(`${parse('Author', themes.property)}: ${message.member.nickname}`);
+    console.log(`${parse('ID', themes.property)}: ${message.author.id}`);
+    console.log(separator);
     switch (command) {
     case 'register':
         register(message, body);
@@ -109,8 +107,8 @@ client.on('guildMemberUpdate', async (oldMember, newMember) => {
         newNicknameCut !== oldNicknameCut
         && newMember.user.id !== client.user.id
     ) {
-        console.log('Nickname was updated due to change'.log);
-        console.log(logUtilities.separator);
+        console.log(parse('Nickname was updated due to change', themes.log));
+        console.log(separator);
         updateNickname(newNicknameCut, id);
     }
 });
