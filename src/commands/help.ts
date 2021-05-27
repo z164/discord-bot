@@ -9,6 +9,6 @@ export default async (channel: TextChannel | DMChannel | NewsChannel) => {
     channel.send(
         'Feedback: **@z164#2176**\nGithub page: https://github.com/z164/discord-bot\nSmiley face :)\n\n(still beta, would be improved)'
     );
-    console.log(parse('Help was sent',themes.log));
+    console.log(parse('Help was sent', themes.log));
     console.log(separator);
 };

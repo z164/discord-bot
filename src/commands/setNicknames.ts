@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Client, Guild, Message } from 'discord.js';
 import { IUser } from '../entities/User';
 
@@ -6,6 +6,7 @@ import UserModel from '../entities/User';
 import GuildModel from '../entities/Guild';
 
 import { parse, title, themes, separator } from './utility/logUtilities';
+import { IData } from '../interfaces/data';
 
 export default async (client: Client, guildID: string, message: Message = null) => {
     title('Update');
@@ -17,7 +18,7 @@ export default async (client: Client, guildID: string, message: Message = null) 
     }
     axios
         .get('http://www.dota2.com/webapi/ILeaderboard/GetDivisionLeaderboard/v0001?division=europe&leaderboard=0')
-        .then(async (response) => {
+        .then(async (response: AxiosResponse<IData>) => {
             const { data } = response;
             const guildObj = await GuildModel.findOne({
                 guildID: guildID,

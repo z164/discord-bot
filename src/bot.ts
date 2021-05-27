@@ -1,5 +1,5 @@
-import * as discord from 'discord.js'
-import mongoose from 'mongoose'
+import * as discord from 'discord.js';
+import mongoose from 'mongoose';
 
 import { parse, themes, title, separator } from './commands/utility/logUtilities';
 
@@ -27,7 +27,7 @@ mongoose.connect(
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useFindAndModify: false
+        useFindAndModify: false,
     },
     () => {
         console.log('MongoDB cluster connection established');
@@ -55,33 +55,33 @@ const messageHandle = async (message: discord.Message) => {
     console.log(`${parse('ID', themes.property)}: ${message.author.id}`);
     console.log(separator);
     switch (command) {
-    case 'register':
-        register(message, body);
-        break;
-    case 'update':
-        setNicknames(client, message.guild.id, message);
-        break;
-    case 'edit':
-        editOwnDotaNickname(body, message);
-        break;
-    case 'help':
-        help(message.channel);
-        break;
-    case 'lock':
-        canEditPermissionsSet(message, false);
-        break;
-    case 'unlock':
-        canEditPermissionsSet(message, true);
-        break;
-    case 'get':
-        getUsersDotaNickname(message);
-        break;
-    case 'set':
-        setUsersDotaNickname(message, body);
-        break;
-    default:
-        message.channel.send('Unknown command');
-        break;
+        case 'register':
+            register(message, body);
+            break;
+        case 'update':
+            setNicknames(client, message.guild.id, message);
+            break;
+        case 'edit':
+            editOwnDotaNickname(body, message);
+            break;
+        case 'help':
+            help(message.channel);
+            break;
+        case 'lock':
+            canEditPermissionsSet(message, false);
+            break;
+        case 'unlock':
+            canEditPermissionsSet(message, true);
+            break;
+        case 'get':
+            getUsersDotaNickname(message);
+            break;
+        case 'set':
+            setUsersDotaNickname(message, body);
+            break;
+        default:
+            message.channel.send('Unknown command');
+            break;
     }
 };
 
@@ -90,7 +90,7 @@ client.on('message', messageHandle);
 client.on('ready', async () => {
     setInterval(() => interval(client), 3600000);
 });
-client.on('guildDelete', async guild => {
+client.on('guildDelete', async (guild) => {
     await guildDelete(guild.id);
 });
 client.on('guildMemberUpdate', async (oldMember, newMember) => {
@@ -103,10 +103,7 @@ client.on('guildMemberUpdate', async (oldMember, newMember) => {
     const rankRegexp = /\s\[\d{1,4}\]/gm;
     const newNicknameCut = newNickname.replace(rankRegexp, '');
     const oldNicknameCut = oldNickname.replace(rankRegexp, '');
-    if (
-        newNicknameCut !== oldNicknameCut
-        && newMember.user.id !== client.user.id
-    ) {
+    if (newNicknameCut !== oldNicknameCut && newMember.user.id !== client.user.id) {
         console.log(parse('Nickname was updated due to change', themes.log));
         console.log(separator);
         updateNickname(newNicknameCut, id);

@@ -32,6 +32,14 @@ export default async (message: Message) => {
         message.channel.send('This user is not registered in system');
         return;
     }
-    console.log(parse(`${parse(user.nickname, themes.nicknameStyle)}'s Dota 2 nickname is ${parse(user.dotaNickname, themes.nicknameStyle)}`, themes.log));
+    console.log(
+        parse(
+            `${parse(user.nickname, themes.nicknameStyle)}'s Dota 2 nickname is ${parse(
+                user.dotaNickname,
+                themes.nicknameStyle
+            )}`,
+            themes.log
+        )
+    );
     message.channel.send(`${user.nickname}'s Dota 2 nickname is ${user.dotaNickname}`);
 };

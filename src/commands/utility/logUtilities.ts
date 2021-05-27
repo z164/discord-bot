@@ -8,7 +8,7 @@ colors.setTheme({
     warning: ['bold', 'black', 'bgYellow'],
     log: ['bgGreen', 'white'],
     property: ['bgGreen', 'white', 'bold'],
-    separator: ['bold', 'red']
+    separator: ['bold', 'red'],
 });
 
 export enum themes {
@@ -18,22 +18,16 @@ export enum themes {
     warning = 'warning',
     log = 'log',
     property = 'property',
-    separator = 'separator'
+    separator = 'separator',
 }
 
 export const parse = (string: string, theme: themes): string => {
     // @ts-ignore
-    return string[theme]
-}
+    return string[theme];
+};
 
 export const separator = parse('----------------------------', themes.separator);
 
 export const title = (titleName: string) => {
-    console.log(
-        `[${moment(new Date()).format('H:mm:ss').magenta}][${
-            parse(titleName, themes.title)
-        }]`
-    );
+    console.log(`[${moment(new Date()).format('H:mm:ss').magenta}][${parse(titleName, themes.title)}]`);
 };
-
-
