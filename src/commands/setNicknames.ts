@@ -42,7 +42,7 @@ export default async (client: Client, guildID: string, message: Message = null) 
                 return;
             }
             users.forEach((user: IUser) => {
-                const player = data.leaderboard.find((el: any) => {
+                const player = data.leaderboard?.find((el: any) => {
                     return el.name.toLowerCase() === user.dotaNickname.toLowerCase();
                 });
                 currentGuild.members.fetch(user.discordID).then((fetchedMember) => {
