@@ -3,9 +3,13 @@
     "version": "1.0.0",
     "description": "",
     "main": "bot.js",
+    "repository": {
+        "url": "https://github.com/z164/discord-bot"
+    },
     "scripts": {
-        "start": "npx ts-node-dev src/bot.js",
+        "start": "npx ts-node-dev src/bot.ts",
         "build": "npx tsc --build",
+        "start:dev": "node dist/bot.js",
         "nodemon": "nodemon src/bot.ts"
     },
     "author": "z164",
