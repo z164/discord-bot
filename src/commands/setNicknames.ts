@@ -16,72 +16,67 @@ export default async (client: Client, guildID: string, message: Message = null) 
         message.channel.send('You need administrator permissions on server to do this');
         return;
     }
-    axios
-        .get('http://www.dota2.com/webapi/ILeaderboard/GetDivisionLeaderboard/v0001?division=europe&leaderboard=0')
-        .then(async (response: AxiosResponse<IData>) => {
-            const { data } = response;
-            const guildObj = await GuildModel.findOne({
-                guildID: guildID,
-            });
-            const users = await UserModel.find({
-                guildID: guildObj._id,
-            });
-            let currentGuild: Guild;
-            try {
-                currentGuild = await client.guilds.fetch(guildID);
-            } catch {
-                await GuildModel.findOneAndDelete({
-                    guildID: guildID,
-                });
+    const response: AxiosResponse<IData> = await axios.get(
+        'http://www.dota2.com/webapi/ILeaderboard/GetDivisionLeaderboard/v0001?division=europe&leaderboard=0'
+    );
+    const { data } = response;
+    const guildObj = await GuildModel.findOne({
+        guildID: guildID,
+    });
+    const users = await UserModel.find({
+        guildID: guildObj._id,
+    });
+    let currentGuild: Guild;
+    try {
+        currentGuild = await client.guilds.fetch(guildID);
+    } catch {
+        console.log(
+            parse(
+                `Couldnt reach ${parse(guildID, themes.nicknameStyle)} guild, removing it from database`,
+                themes.error
+            )
+        );
+        await GuildModel.findOneAndDelete({
+            guildID: guildID,
+        });
+        console.log(separator);
+        return;
+    }
+    users.forEach(async (user: IUser) => {
+        const player = data.leaderboard?.find((el: any) => {
+            return el.name.toLowerCase() === user.dotaNickname.toLowerCase();
+        });
+        const fetchedMember = await currentGuild.members.fetch(user.discordID);
+        try {
+            if (!player) {
                 console.log(
                     parse(
-                        `Couldnt reach ${parse(guildID, themes.nicknameStyle)} guild, removing it from database`,
-                        themes.error
+                        `${parse(
+                            user.nickname,
+                            themes.nicknameStyle
+                        )} is not present on leaderboards. Reseting his nickname`,
+                        themes.warning
                     )
                 );
-                console.log(separator);
+                fetchedMember.setNickname(`${user.nickname}`, 'This player is not present on leaderboards');
                 return;
             }
-            users.forEach((user: IUser) => {
-                const player = data.leaderboard?.find((el: any) => {
-                    return el.name.toLowerCase() === user.dotaNickname.toLowerCase();
-                });
-                currentGuild.members.fetch(user.discordID).then((fetchedMember) => {
-                    try {
-                        if (player) {
-                            fetchedMember.setNickname(
-                                `${user.nickname} [${player.rank}]`,
-                                'Nickname changed due to rank update'
-                            );
-                            console.log(
-                                parse(
-                                    `${parse(user.nickname, themes.nicknameStyle)}'s rank was updated to ${parse(
-                                        String(player.rank),
-                                        themes.nicknameStyle
-                                    )}`,
-                                    themes.log
-                                )
-                            );
-                            if (message === null) {
-                                console.log(`${parse('Guild', themes.property)}: ${guildObj.name}`);
-                                console.log(`${parse('ID', themes.property)}: ${guildObj.guildID}`);
-                            }
-                        } else {
-                            console.log(
-                                parse(
-                                    `${parse(
-                                        user.nickname,
-                                        themes.nicknameStyle
-                                    )} is not present on leaderboards. Reseting his nickname`,
-                                    themes.warning
-                                )
-                            );
-                            fetchedMember.setNickname(`${user.nickname}`, 'This player is not present on leaderboards');
-                        }
-                    } catch (err) {
-                        console.log(parse("Somehow server owner's nickname was tried to change", themes.error));
-                    }
-                });
-            });
-        });
+            fetchedMember.setNickname(`${user.nickname} [${player.rank}]`, 'Nickname changed due to rank update');
+            console.log(
+                parse(
+                    `${parse(user.nickname, themes.nicknameStyle)}'s rank was updated to ${parse(
+                        String(player.rank),
+                        themes.nicknameStyle
+                    )}`,
+                    themes.log
+                )
+            );
+            if (message === null) {
+                console.log(`${parse('Guild', themes.property)}: ${guildObj.name}`);
+                console.log(`${parse('ID', themes.property)}: ${guildObj.guildID}`);
+            }
+        } catch (err) {
+            console.log(parse("Somehow server owner's nickname was tried to change", themes.error));
+        }
+    });
 };
