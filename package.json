@@ -9,7 +9,7 @@
     "scripts": {
         "start": "npx ts-node-dev src/bot.ts",
         "build": "npx tsc --build",
-        "start:dev": "node dist/bot.js",
+        "start:prod": "node dist/bot.js",
         "nodemon": "nodemon src/bot.ts"
     },
     "author": "z164",
@@ -18,9 +18,12 @@
         "axios": "^0.21.1",
         "colors": "^1.4.0",
         "discord.js": "^12.5.1",
+        "dota2": "^7.0.3",
         "dotenv": "^8.2.0",
         "moment": "^2.29.1",
-        "mongoose": "^5.11.13"
+        "mongoose": "^5.11.13",
+        "protobufjs": "^5.0.1",
+        "steam-resources": "github:seishun/node-steam-resources"
     },
     "devDependencies": {
         "eslint": "^7.2.0",

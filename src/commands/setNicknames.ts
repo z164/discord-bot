@@ -1,12 +1,12 @@
-import axios, { AxiosResponse } from 'axios';
-import { Client, Guild, Message } from 'discord.js';
-import { IUser } from '../entities/User';
+import {Client, Guild, Message} from 'discord.js';
+
+import dota from '../dota';
 
 import UserModel from '../entities/User';
 import GuildModel from '../entities/Guild';
 
-import { parse, title, themes, separator } from './utility/logUtilities';
-import { IData } from '../interfaces/data';
+import {parse, title, themes, separator} from './util/logUtilities';
+import parseRank from './util/parseRank';
 
 export default async (client: Client, guildID: string, message: Message = null) => {
     title('Update');
@@ -16,10 +16,6 @@ export default async (client: Client, guildID: string, message: Message = null) 
         message.channel.send('You need administrator permissions on server to do this');
         return;
     }
-    const response: AxiosResponse<IData> = await axios.get(
-        'http://www.dota2.com/webapi/ILeaderboard/GetDivisionLeaderboard/v0001?division=europe&leaderboard=0'
-    );
-    const { data } = response;
     const guildObj = await GuildModel.findOne({
         guildID: guildID,
     });
@@ -42,30 +38,21 @@ export default async (client: Client, guildID: string, message: Message = null) 
         console.log(separator);
         return;
     }
-    users.forEach(async (user: IUser) => {
-        const player = data.leaderboard?.find((el: any) => {
-            return el.name.toLowerCase() === user.dotaNickname.toLowerCase();
-        });
+    for (const user of users) {
+        if (!user.steam32ID) {
+            console.log('Not updated to v2');
+            continue;
+        }
+        console.log(user.steam32ID);
+        const profile = await dota.getProfile(user.steam32ID);
+        const rank = parseRank(profile);
         const fetchedMember = await currentGuild.members.fetch(user.discordID);
         try {
-            if (!player) {
-                console.log(
-                    parse(
-                        `${parse(
-                            user.nickname,
-                            themes.nicknameStyle
-                        )} is not present on leaderboards. Reseting his nickname`,
-                        themes.warning
-                    )
-                );
-                fetchedMember.setNickname(`${user.nickname}`, 'This player is not present on leaderboards');
-                return;
-            }
-            fetchedMember.setNickname(`${user.nickname} [${player.rank}]`, 'Nickname changed due to rank update');
+            fetchedMember.setNickname(`${user.nickname} [${rank}]`, 'Nickname changed due to rank update');
             console.log(
                 parse(
                     `${parse(user.nickname, themes.nicknameStyle)}'s rank was updated to ${parse(
-                        String(player.rank),
+                        String(rank),
                         themes.nicknameStyle
                     )}`,
                     themes.log
@@ -78,5 +65,5 @@ export default async (client: Client, guildID: string, message: Message = null) 
         } catch (err) {
             console.log(parse("Somehow server owner's nickname was tried to change", themes.error));
         }
-    });
+    }
 };

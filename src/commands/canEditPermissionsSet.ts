@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import UserModel from '../entities/User';
 
-import { title, themes, separator, parse } from './utility/logUtilities';
+import { title, themes, separator, parse } from './util/logUtilities';
 
 export default async (message: Message, parameter: boolean) => {
     title('Lock / Unlock');

@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import UserModel from '../entities/User';
 
-import { parse, title, themes, separator } from './utility/logUtilities';
+import { parse, title, themes, separator } from './util/logUtilities';
 
 export default async (body: string[], message: Message) => {
     title('Edit');

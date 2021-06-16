@@ -3,7 +3,7 @@ import GuildModel from '../entities/Guild';
 
 import { Message } from 'discord.js';
 
-import { parse, title, themes, separator } from './utility/logUtilities';
+import { parse, title, themes, separator } from './util/logUtilities';
 
 export default async (message: Message, body: string[]) => {
     title('Set');

@@ -4,13 +4,14 @@ import { IGuild } from '../entities/Guild';
 import UserModel from '../entities/User';
 import GuildModel from '../entities/Guild';
 
-import { parse, title, themes, separator } from './utility/logUtilities';
+import { parse, title, themes, separator } from './util/logUtilities';
+import validateSteam32ID from './util/validateSteam32ID';
 
 export default async (message: Message, body: string[]) => {
     title('Register');
     let discordID = message.member.user.id;
+    let steam32ID: string | false | number = body.join(' ').trim();
     const nickname = message.member.nickname ?? message.member.user.username;
-    const dotaNickname = body.join(' ').trim();
     const guildID = message.guild.id;
     const guildName = message.guild.name;
     if (message.author.id === message.guild.ownerID) {
@@ -22,10 +23,17 @@ export default async (message: Message, body: string[]) => {
         );
         discordID = message.guild.me.id;
     }
-    if (dotaNickname === '') {
-        console.log(parse('No nickname provided', themes.error));
+    if (steam32ID === '') {
+        console.log(parse('No Steam32 ID provided', themes.error));
         console.log(separator);
-        message.channel.send('No nickname provided');
+        message.channel.send('No Steam32 ID provided');
+        return;
+    }
+    steam32ID = validateSteam32ID(steam32ID)
+    if (steam32ID) {
+        console.log(parse('Bad ID provided', themes.error))
+        console.log(separator);
+        message.channel.send('Please provide valid Steam32 ID')
         return;
     }
     let guildObj: IGuild;
@@ -57,7 +65,7 @@ export default async (message: Message, body: string[]) => {
             guildID: guildObj._id,
             discordID: discordID,
             nickname: nickname,
-            dotaNickname: dotaNickname,
+            steam32ID: steam32ID,
             canEdit: true,
         },
         (err: Error) => {
@@ -66,8 +74,8 @@ export default async (message: Message, body: string[]) => {
             } else {
                 console.log(
                     parse(
-                        `${parse(nickname, themes.nicknameStyle)} registered successfully with nickname ${parse(
-                            dotaNickname,
+                        `${parse(nickname, themes.nicknameStyle)} registered successfully with id ${parse(
+                            String(steam32ID),
                             themes.nicknameStyle
                         )}`,
                         themes.log
@@ -75,7 +83,7 @@ export default async (message: Message, body: string[]) => {
                 );
                 console.log(separator);
                 message.channel.send(
-                    `Registered successfully:\nID: ${discordID}\nGuildID: ${guildObj.guildID}\nNickname: ${nickname}\nDota Nickname: ${dotaNickname}`
+                    `Registered successfully:\nID: ${discordID}\nGuildID: ${guildObj.guildID}\nNickname: ${nickname}\nSteam32ID: ${steam32ID}`
                 );
             }
         }

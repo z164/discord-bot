@@ -1,5 +1,5 @@
 import { TextChannel, DMChannel, NewsChannel } from 'discord.js';
-import { parse, title, themes, separator } from './utility/logUtilities';
+import { parse, title, themes, separator } from './util/logUtilities';
 
 export default async (channel: TextChannel | DMChannel | NewsChannel) => {
     title('Help');
