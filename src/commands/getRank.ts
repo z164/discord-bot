@@ -13,6 +13,10 @@ export default async function getRank(message: Message, body: Array<string>) {
         return
     }
     const profileData: profileData = await dota.getProfile(Number(body)) as profileData
+    if(profileData.rank_tier === null) {
+        message.channel.send('Bad profile')
+        return
+    }
     if(profileData.leaderboard_rank !== null) {
         message.channel.send(profileData.leaderboard_rank)
         return

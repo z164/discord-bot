@@ -4,10 +4,10 @@ import {client} from '../discord';
 
 import register from '../commands/register';
 import setNicknames from '../commands/setNicknames';
-import editOwnDotaNickname from '../commands/editOwnDotaNickname';
+import editOwnSteam32ID from '../commands/editOwnSteam32ID';
 import canEditPermissionsSet from '../commands/canEditPermissionsSet';
-import setUsersDotaNickname from '../commands/setUsersDotaNickname';
-import getUsersDotaNickname from '../commands/getUsersDotaNickname';
+import setUsersSteam32ID from '../commands/setUsersSteam32ID';
+import getUsersSteam32ID from '../commands/getUsersSteam32ID';
 import help from '../commands/help';
 
 import {parse, separator, themes, title} from '../commands/util/logUtilities';
@@ -41,7 +41,7 @@ export default async function messageHandle(message: Message) {
             setNicknames(client, message.guild.id, message);
             break;
         case 'edit':
-            editOwnDotaNickname(body, message);
+            editOwnSteam32ID(body, message);
             break;
         case 'help':
             help(message.channel);
@@ -53,10 +53,10 @@ export default async function messageHandle(message: Message) {
             canEditPermissionsSet(message, true);
             break;
         case 'get':
-            getUsersDotaNickname(message);
+            getUsersSteam32ID(message);
             break;
         case 'set':
-            setUsersDotaNickname(message, body);
+            setUsersSteam32ID(message, body);
             break;
         case 'getRank':
             getRank(message, body)

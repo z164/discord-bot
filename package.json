@@ -7,10 +7,11 @@
         "url": "https://github.com/z164/discord-bot"
     },
     "scripts": {
-        "start": "npx ts-node-dev src/bot.ts",
+        "start": "npx ts-node src/index.ts",
+        "start:dev": "npx ts-node-dev src/index.ts",
         "build": "npx tsc --build",
-        "start:prod": "node dist/bot.js",
-        "nodemon": "nodemon src/bot.ts"
+        "start:prod": "node dist/index.js",
+        "nodemon": "nodemon src/index.ts"
     },
     "author": "z164",
     "license": "ISC",

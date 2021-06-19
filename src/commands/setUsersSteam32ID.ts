@@ -4,6 +4,7 @@ import GuildModel from '../entities/Guild';
 import { Message } from 'discord.js';
 
 import { parse, title, themes, separator } from './util/logUtilities';
+import validateSteam32ID from './util/validateSteam32ID';
 
 export default async (message: Message, body: string[]) => {
     title('Set');
@@ -21,6 +22,13 @@ export default async (message: Message, body: string[]) => {
     }
     body.shift();
     const bodyStr = body.join(' ').trim();
+    const steam32ID = validateSteam32ID(bodyStr)
+    if (!steam32ID) {
+        console.log(parse('Bad ID provided', themes.error))
+        console.log(separator);
+        message.channel.send('Please provide valid Steam32 ID')
+        return;
+    }
     let idToSet = message.mentions.users.first().id;
     if (idToSet === message.guild.ownerID) {
         console.log(parse("Mentioned user is a guild owner. Using bot's id to proceed", themes.warning));
@@ -36,7 +44,7 @@ export default async (message: Message, body: string[]) => {
                 discordID: idToSet,
             },
             {
-                dotaNickname: bodyStr,
+                steam32ID: steam32ID,
             }
         );
         if (res === null) {

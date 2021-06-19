@@ -30,7 +30,7 @@ export default async (message: Message, body: string[]) => {
         return;
     }
     steam32ID = validateSteam32ID(steam32ID)
-    if (steam32ID) {
+    if (!steam32ID) {
         console.log(parse('Bad ID provided', themes.error))
         console.log(separator);
         message.channel.send('Please provide valid Steam32 ID')

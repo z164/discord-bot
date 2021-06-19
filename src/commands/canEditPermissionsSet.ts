@@ -29,14 +29,14 @@ export default async (message: Message, parameter: boolean) => {
         const res = await UserModel.findOneAndUpdate({ discordID: idToBan }, { canEdit: parameter });
         console.log(
             parse(
-                `${parse(res.dotaNickname, themes.nicknameStyle)} ${
-                    parameter ? 'can now edit his nickname' : 'can no longer edit his nickname'
+                `${parse(res.nickname, themes.nicknameStyle)} ${
+                    parameter ? 'can now edit his Steam ID' : 'can no longer edit his Steam ID'
                 }`,
                 themes.log
             )
         );
         message.channel.send(
-            `${res.dotaNickname} ${parameter ? 'can now edit his nickname' : 'can no longer edit his nickname'}`
+            `${res.nickname} ${parameter ? 'can now edit his Steam ID' : 'can no longer edit his Steam ID'}`
         );
     } catch (err) {
         console.error(err);

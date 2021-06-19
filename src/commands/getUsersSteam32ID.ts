@@ -34,12 +34,12 @@ export default async (message: Message) => {
     }
     console.log(
         parse(
-            `${parse(user.nickname, themes.nicknameStyle)}'s Dota 2 nickname is ${parse(
-                user.dotaNickname,
+            `${parse(user.nickname, themes.nicknameStyle)}'s Steam ID is ${parse(
+                String(user.steam32ID),
                 themes.nicknameStyle
             )}`,
             themes.log
         )
     );
-    message.channel.send(`${user.nickname}'s Dota 2 nickname is ${user.dotaNickname}`);
+    message.channel.send(`${user.nickname}'s Steam ID is ${user.steam32ID}`);
 };

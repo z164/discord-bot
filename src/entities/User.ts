@@ -4,7 +4,7 @@ export interface IUser extends Document {
     guildID: Types.ObjectId;
     discordID: string;
     nickname: string;
-    dotaNickname: string;
+    // dotaNickname: string;
     steam32ID: number;
     canEdit: boolean;
 }
@@ -18,9 +18,6 @@ const userSchema: Schema = new Schema({
         type: String,
     },
     nickname: {
-        type: String,
-    },
-    dotaNickname: {
         type: String,
     },
     steam32ID: {

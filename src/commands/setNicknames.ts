@@ -43,7 +43,6 @@ export default async (client: Client, guildID: string, message: Message = null) 
             console.log('Not updated to v2');
             continue;
         }
-        console.log(user.steam32ID);
         const profile = await dota.getProfile(user.steam32ID);
         const rank = parseRank(profile);
         const fetchedMember = await currentGuild.members.fetch(user.discordID);

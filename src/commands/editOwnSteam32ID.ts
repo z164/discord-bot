@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 import UserModel from '../entities/User';
 
 import { parse, title, themes, separator } from './util/logUtilities';
+import validateSteam32ID from './util/validateSteam32ID';
 
 export default async (body: string[], message: Message) => {
     title('Edit');
@@ -23,6 +24,13 @@ export default async (body: string[], message: Message) => {
         message.channel.send('No nickname provided');
         return;
     }
+    const steam32ID = validateSteam32ID(bodyStr)
+    if (!steam32ID) {
+        console.log(parse('Bad ID provided', themes.error))
+        console.log(separator);
+        message.channel.send('Please provide valid Steam32 ID')
+        return;
+    }
     const currentUser = await UserModel.findOne({
         discordID: discordID,
     });
@@ -33,16 +41,16 @@ export default async (body: string[], message: Message) => {
         return;
     }
     if (!currentUser.canEdit) {
-        console.log(parse('User that invoked this command is banned from editing his nickname', themes.error));
+        console.log(parse('User that invoked this command is banned from editing his Steam ID', themes.error));
         console.log(separator);
-        message.channel.send('You were banned from editing your nickname');
+        message.channel.send('You were banned from editing your Steam ID');
         return;
     }
     try {
-        await UserModel.findOneAndUpdate({ discordID: discordID }, { dotaNickname: bodyStr });
-        console.log(parse('Nickname successfully updated', themes.log));
+        await UserModel.findOneAndUpdate({ discordID: discordID }, { steam32ID: steam32ID });
+        console.log(parse('Steam ID successfully updated', themes.log));
         console.log(separator);
-        message.channel.send('Your nickname was updated successfully');
+        message.channel.send('Your Steam ID was updated successfully');
     } catch (err) {
         console.error(err);
     }
