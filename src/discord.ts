@@ -14,13 +14,12 @@ export class Discord {
     }
 
     getClient() {
-        return this.Client
+        return this.Client;
     }
-
 }
 
 const instance = new Discord();
 
 export default instance;
 
-export const client = instance.getClient()
+export const client = instance.getClient();

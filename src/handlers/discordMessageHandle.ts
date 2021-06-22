@@ -59,7 +59,7 @@ export default async function messageHandle(message: Message) {
             setUsersSteam32ID(message, body);
             break;
         case 'getRank':
-            getRank(message, body)
+            getRank(message, body);
             break;
         default:
             message.channel.send('Unknown command');

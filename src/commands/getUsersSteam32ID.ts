@@ -1,9 +1,9 @@
-import { Message } from 'discord.js';
+import {Message} from 'discord.js';
 
 import UserModel from '../entities/User';
 import GuildModel from '../entities/Guild';
 
-import { title, separator, themes, parse } from './util/logUtilities';
+import {title, separator, themes, parse} from './util/logUtilities';
 
 export default async (message: Message) => {
     title('Get');

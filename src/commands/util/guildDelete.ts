@@ -1,7 +1,7 @@
 import UserModel from '../../entities/User';
 import GuildModel from '../../entities/Guild';
 
-import { parse, separator, title, themes } from './logUtilities';
+import {parse, separator, title, themes} from './logUtilities';
 
 export default async (guildID: string) => {
     title('GuildDelete');

@@ -1,11 +1,12 @@
-import { Message } from 'discord.js';
-import { IGuild } from '../entities/Guild';
+import {Message} from 'discord.js';
+import {IGuild} from '../entities/Guild';
 
 import UserModel from '../entities/User';
 import GuildModel from '../entities/Guild';
 
-import { parse, title, themes, separator } from './util/logUtilities';
+import {parse, title, themes, separator} from './util/logUtilities';
 import validateSteam32ID from './util/validateSteam32ID';
+import fetch64ID from './util/fetch64ID';
 
 export default async (message: Message, body: string[]) => {
     title('Register');
@@ -29,11 +30,11 @@ export default async (message: Message, body: string[]) => {
         message.channel.send('No Steam32 ID provided');
         return;
     }
-    steam32ID = validateSteam32ID(steam32ID)
+    steam32ID = validateSteam32ID(steam32ID);
     if (!steam32ID) {
-        console.log(parse('Bad ID provided', themes.error))
+        console.log(parse('Bad ID provided', themes.error));
         console.log(separator);
-        message.channel.send('Please provide valid Steam32 ID')
+        message.channel.send('Please provide valid Steam32 ID');
         return;
     }
     let guildObj: IGuild;
@@ -66,6 +67,7 @@ export default async (message: Message, body: string[]) => {
             discordID: discordID,
             nickname: nickname,
             steam32ID: steam32ID,
+            steam64ID: await fetch64ID(steam32ID),
             canEdit: true,
         },
         (err: Error) => {

@@ -7,6 +7,7 @@ import GuildModel from '../entities/Guild';
 
 import {parse, title, themes, separator} from './util/logUtilities';
 import parseRank from './util/parseRank';
+import fetch64ID from './util/fetch64ID';
 
 export default async (client: Client, guildID: string, message: Message = null) => {
     title('Update');
@@ -43,6 +44,9 @@ export default async (client: Client, guildID: string, message: Message = null) 
             console.log('Not updated to v2');
             continue;
         }
+        await UserModel.findByIdAndUpdate(user._id, {
+            steam64ID: await fetch64ID(user.steam32ID)
+        }) 
         const profile = await dota.getProfile(user.steam32ID);
         const rank = parseRank(profile);
         const fetchedMember = await currentGuild.members.fetch(user.discordID);

@@ -1,10 +1,12 @@
 import UserModel from '../entities/User';
 import GuildModel from '../entities/Guild';
 
-import { Message } from 'discord.js';
+import {Message} from 'discord.js';
 
-import { parse, title, themes, separator } from './util/logUtilities';
+import {parse, title, themes, separator} from './util/logUtilities';
+
 import validateSteam32ID from './util/validateSteam32ID';
+import fetch64ID from './util/fetch64ID';
 
 export default async (message: Message, body: string[]) => {
     title('Set');
@@ -22,11 +24,11 @@ export default async (message: Message, body: string[]) => {
     }
     body.shift();
     const bodyStr = body.join(' ').trim();
-    const steam32ID = validateSteam32ID(bodyStr)
+    const steam32ID = validateSteam32ID(bodyStr);
     if (!steam32ID) {
-        console.log(parse('Bad ID provided', themes.error))
+        console.log(parse('Bad ID provided', themes.error));
         console.log(separator);
-        message.channel.send('Please provide valid Steam32 ID')
+        message.channel.send('Please provide valid Steam32 ID');
         return;
     }
     let idToSet = message.mentions.users.first().id;
@@ -39,13 +41,8 @@ export default async (message: Message, body: string[]) => {
     });
     try {
         const res = await UserModel.findOneAndUpdate(
-            {
-                guildID: guildObj._id,
-                discordID: idToSet,
-            },
-            {
-                steam32ID: steam32ID,
-            }
+            {guildID: guildObj._id, discordID: idToSet},
+            {steam32ID: steam32ID, steam64ID: await fetch64ID(steam32ID)}
         );
         if (res === null) {
             console.log(parse('Mentioned user is not registered in system', themes.error));
@@ -54,7 +51,7 @@ export default async (message: Message, body: string[]) => {
         } else {
             console.log(
                 parse(
-                    `Changed ${parse(res.nickname, themes.nicknameStyle)}'s Dota 2 nickname to ${parse(
+                    `Changed ${parse(res.nickname, themes.nicknameStyle)}'s Steam32 ID to ${parse(
                         bodyStr,
                         themes.nicknameStyle
                     )}`,
@@ -62,7 +59,7 @@ export default async (message: Message, body: string[]) => {
                 )
             );
             console.log(separator);
-            message.channel.send(`Changed ${res.nickname}'s Dota 2 nickname to ${bodyStr}`);
+            message.channel.send(`Changed ${res.nickname}'s Steam32 ID to ${bodyStr}`);
         }
     } catch (err) {
         if (err) {

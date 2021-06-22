@@ -1,7 +1,7 @@
-import { Message } from 'discord.js';
+import {Message} from 'discord.js';
 import UserModel from '../entities/User';
 
-import { title, themes, separator, parse } from './util/logUtilities';
+import {title, themes, separator, parse} from './util/logUtilities';
 
 export default async (message: Message, parameter: boolean) => {
     title('Lock / Unlock');
@@ -26,7 +26,7 @@ export default async (message: Message, parameter: boolean) => {
         return;
     }
     try {
-        const res = await UserModel.findOneAndUpdate({ discordID: idToBan }, { canEdit: parameter });
+        const res = await UserModel.findOneAndUpdate({discordID: idToBan}, {canEdit: parameter});
         console.log(
             parse(
                 `${parse(res.nickname, themes.nicknameStyle)} ${

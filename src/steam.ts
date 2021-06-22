@@ -30,10 +30,10 @@ class Steam {
             this.Client.once('logOnResponse', (response: any) => {
                 if (response.eresult !== steam.EResult.OK) {
                     console.log('Error logging in');
-                    reject(new Error('Login failed'));
+                    reject('Login failed');
                 }
-                console.log('Logged in successfully')
-                this.Friends.setPersonaState(steam.EPersonaState.Online);
+                console.log('Logged in successfully');
+                this.Friends.setPersonaState(steam.EPersonaState.Invisible);
                 this.Friends.setPersonaName(process.env.steam_name);
                 resolve(this.Client);
             });
@@ -41,6 +41,6 @@ class Steam {
     }
 }
 
-const instance = new Steam()
+const instance = new Steam();
 
-export default instance
+export default instance;

@@ -1,7 +1,8 @@
-import { Message } from 'discord.js';
+import {Message} from 'discord.js';
 import UserModel from '../entities/User';
+import fetch64ID from './util/fetch64ID';
 
-import { parse, title, themes, separator } from './util/logUtilities';
+import {parse, title, themes, separator} from './util/logUtilities';
 import validateSteam32ID from './util/validateSteam32ID';
 
 export default async (body: string[], message: Message) => {
@@ -24,11 +25,11 @@ export default async (body: string[], message: Message) => {
         message.channel.send('No nickname provided');
         return;
     }
-    const steam32ID = validateSteam32ID(bodyStr)
+    const steam32ID = validateSteam32ID(bodyStr);
     if (!steam32ID) {
-        console.log(parse('Bad ID provided', themes.error))
+        console.log(parse('Bad ID provided', themes.error));
         console.log(separator);
-        message.channel.send('Please provide valid Steam32 ID')
+        message.channel.send('Please provide valid Steam32 ID');
         return;
     }
     const currentUser = await UserModel.findOne({
@@ -47,7 +48,10 @@ export default async (body: string[], message: Message) => {
         return;
     }
     try {
-        await UserModel.findOneAndUpdate({ discordID: discordID }, { steam32ID: steam32ID });
+        await UserModel.findOneAndUpdate(
+            {discordID: discordID},
+            {steam32ID: steam32ID, steam64ID: await fetch64ID(steam32ID)}
+        );
         console.log(parse('Steam ID successfully updated', themes.log));
         console.log(separator);
         message.channel.send('Your Steam ID was updated successfully');

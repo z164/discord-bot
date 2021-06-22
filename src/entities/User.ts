@@ -1,17 +1,21 @@
-import { Schema, Types, model, Document } from 'mongoose';
+import mongoose, {Schema, model, Document} from 'mongoose';
+import mongooseLong from 'mongoose-long';
+
+mongooseLong(mongoose)
+const Long = mongoose.Schema.Types.Long
 
 export interface IUser extends Document {
-    guildID: Types.ObjectId;
+    guildID: Schema.Types.ObjectId;
     discordID: string;
     nickname: string;
-    // dotaNickname: string;
     steam32ID: number;
+    steam64ID: number;
     canEdit: boolean;
 }
 
 const userSchema: Schema = new Schema({
     guildID: {
-        type: Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Guild',
     },
     discordID: {
@@ -21,7 +25,10 @@ const userSchema: Schema = new Schema({
         type: String,
     },
     steam32ID: {
-        type: Number
+        type: Number,
+    },
+    steam64ID: {
+        type: Long,
     },
     canEdit: {
         type: Boolean,
