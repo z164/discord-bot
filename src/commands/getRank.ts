@@ -3,7 +3,7 @@ import {readFileSync} from 'fs';
 import {join} from 'path';
 
 import dota from '../dota';
-import profileData from '../interfaces/profileData';
+import IProfileData from '../interfaces/profileData';
 
 export default async function getRank(message: Message, body: Array<string>) {
     const pathToRanks = join(process.cwd(), 'src', 'commands', 'util', 'ranks.json');
@@ -12,7 +12,7 @@ export default async function getRank(message: Message, body: Array<string>) {
         message.channel.send('Invalid body provided');
         return;
     }
-    const profileData: profileData = (await dota.getProfile(Number(body))) as profileData;
+    const profileData: IProfileData = await dota.getProfile(Number(body));
     if (profileData.rank_tier === null) {
         message.channel.send('Bad profile');
         return;

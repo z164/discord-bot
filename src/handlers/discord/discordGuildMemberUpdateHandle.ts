@@ -1,13 +1,13 @@
-import {client} from '../discord';
+import {client} from '../../discord';
 import {GuildMember, PartialGuildMember} from 'discord.js';
 
-import {parse, themes, separator} from '../commands/util/logUtilities';
-import updateNickname from '../commands/util/updateNickname';
+import {parse, themes, separator, title} from '../../commands/util/logUtilities';
+import updateNickname from '../../commands/util/updateNickname';
 
 export default function guildMemberUpdateHandle(oldMember: GuildMember | PartialGuildMember, newMember: GuildMember) {
-    let id = newMember.user.id;
+    let userID = newMember.user.id;
     if (newMember.user.id === newMember.guild.ownerID) {
-        id = client.user.id;
+        userID = client.user.id;
     }
     const newNickname = newMember.nickname ?? newMember.user.username;
     const oldNickname = oldMember.nickname ?? oldMember.user.username;
@@ -16,8 +16,9 @@ export default function guildMemberUpdateHandle(oldMember: GuildMember | Partial
     const newNicknameCut = newNickname.replace(rankRegexp, '');
     const oldNicknameCut = oldNickname.replace(rankRegexp, '');
     if (newNicknameCut !== oldNicknameCut && newMember.user.id !== client.user.id) {
+        title('Member update');
         console.log(parse('Nickname was updated due to change', themes.log));
         console.log(separator);
-        updateNickname(newNicknameCut, id);
+        updateNickname(newNicknameCut, userID, newMember.guild.id);
     }
 }

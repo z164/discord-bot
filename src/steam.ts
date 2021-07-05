@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv';
+import {title} from './commands/util/logUtilities';
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ class Steam {
         return new Promise((resolve, reject) => {
             this.Client.connect();
             this.Client.once('connected', () => {
-                console.log('Steam connected');
+                title('Steam connected');
                 this.User.logOn({
                     account_name: process.env.steam_user,
                     password: process.env.steam_pass,
@@ -32,12 +33,17 @@ class Steam {
                     console.log('Error logging in');
                     reject('Login failed');
                 }
-                console.log('Logged in successfully');
+                title('Steam logged in');
                 this.Friends.setPersonaState(steam.EPersonaState.Invisible);
                 this.Friends.setPersonaName(process.env.steam_name);
                 resolve(this.Client);
             });
         });
+    }
+
+    async disconnect() {
+        await this.Client.disconnect();
+        title('Steam disconnected');
     }
 }
 

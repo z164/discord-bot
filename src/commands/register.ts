@@ -15,15 +15,6 @@ export default async (message: Message, body: string[]) => {
     const nickname = message.member.nickname ?? message.member.user.username;
     const guildID = message.guild.id;
     const guildName = message.guild.name;
-    if (message.author.id === message.guild.ownerID) {
-        console.log(
-            parse(
-                `${parse(nickname, themes.nicknameStyle)} is a guild owner. Using bot's id to proceed`,
-                themes.warning
-            )
-        );
-        discordID = message.guild.me.id;
-    }
     if (steam32ID === '') {
         console.log(parse('No Steam32 ID provided', themes.error));
         console.log(separator);
@@ -37,13 +28,21 @@ export default async (message: Message, body: string[]) => {
         message.channel.send('Please provide valid Steam32 ID');
         return;
     }
-    let guildObj: IGuild;
-    const guild = await GuildModel.findOne({
+    if (message.author.id === message.guild.ownerID) {
+        console.log(
+            parse(
+                `${parse(nickname, themes.nicknameStyle)} is a guild owner. Using bot's id to proceed`,
+                themes.warning
+            )
+        );
+        discordID = message.guild.me.id;
+    }
+    let guild: IGuild;
+    guild = await GuildModel.findOne({
         guildID: guildID,
     });
-    guildObj = guild;
     if (!guild) {
-        guildObj = await GuildModel.create({
+        guild = await GuildModel.create({
             guildID: guildID,
             name: guildName,
         });
@@ -52,7 +51,7 @@ export default async (message: Message, body: string[]) => {
         console.log(parse('Guild exists in database', themes.log));
     }
     const user = await UserModel.findOne({
-        guildID: guildObj._id,
+        guildID: guild._id,
         discordID: discordID,
     });
     if (user) {
@@ -63,7 +62,7 @@ export default async (message: Message, body: string[]) => {
     }
     UserModel.create(
         {
-            guildID: guildObj._id,
+            guildID: guild._id,
             discordID: discordID,
             nickname: nickname,
             steam32ID: steam32ID,
@@ -85,7 +84,7 @@ export default async (message: Message, body: string[]) => {
                 );
                 console.log(separator);
                 message.channel.send(
-                    `Registered successfully:\nID: ${discordID}\nGuildID: ${guildObj.guildID}\nNickname: ${nickname}\nSteam32ID: ${steam32ID}`
+                    `Registered successfully:\nID: ${discordID}\nGuildID: ${guild.guildID}\nNickname: ${nickname}\nSteam32ID: ${steam32ID}`
                 );
             }
         }

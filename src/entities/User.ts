@@ -1,8 +1,8 @@
 import mongoose, {Schema, model, Document} from 'mongoose';
 import mongooseLong from 'mongoose-long';
 
-mongooseLong(mongoose)
-const Long = mongoose.Schema.Types.Long
+mongooseLong(mongoose);
+const Long = mongoose.Schema.Types.Long;
 
 export interface IUser extends Document {
     guildID: Schema.Types.ObjectId;

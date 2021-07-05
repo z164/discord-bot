@@ -20,6 +20,14 @@ export default async (client: Client, guildID: string, message: Message = null) 
     const guildObj = await GuildModel.findOne({
         guildID: guildID,
     });
+    if (guildObj === null) {
+        console.log(parse(`Guild ${guildID} tried to invoke update without being present in database`, themes.error));
+        console.log(separator);
+        message.channel.send(
+            "None of this guild's members are registered in system. Please register before using this command"
+        );
+        return;
+    }
     const users = await UserModel.find({
         guildID: guildObj._id,
     });
@@ -40,13 +48,9 @@ export default async (client: Client, guildID: string, message: Message = null) 
         return;
     }
     for (const user of users) {
-        if (!user.steam32ID) {
-            console.log('Not updated to v2');
-            continue;
-        }
-        await UserModel.findByIdAndUpdate(user._id, {
-            steam64ID: await fetch64ID(user.steam32ID)
-        }) 
+        // await UserModel.findByIdAndUpdate(user._id, {
+        //     steam64ID: await fetch64ID(user.steam32ID),
+        // });
         const profile = await dota.getProfile(user.steam32ID);
         const rank = parseRank(profile);
         const fetchedMember = await currentGuild.members.fetch(user.discordID);

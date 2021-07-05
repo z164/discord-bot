@@ -1,43 +1,24 @@
-import mongoose from 'mongoose';
-
-import Discord from './discord';
+import discord from './discord';
 import steam from './steam';
 import dota from './dota';
+import mongo from './mongo';
 
-import messageHandle from './handlers/discordMessageHandle';
-import guildMemberUpdateHandle from './handlers/discordGuildMemberUpdateHandle';
+import {title} from './commands/util/logUtilities';
 
-import guildDelete from './commands/util/guildDelete';
-import discordReadyHandler from './handlers/discordReadyHandler';
-
-require('dotenv').config();
-
-async function discordBootstrap() {
-    const discordClient = await Discord.connect(process.env.BOT_TOKEN);
-    discordClient.on('message', messageHandle);
-    discordClient.on('guildMemberUpdate', guildMemberUpdateHandle);
-    discordClient.on('ready', discordReadyHandler);
-    discordClient.on('guildDelete', async (guild) => {
-        await guildDelete(guild.id);
-    });
-}
-
-async function mongooseBootstrap() {
-    await mongoose.connect(process.env.URI || '', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false,
-    }).catch(() => {
-        console.log('MongoDB failed to connect')
-        return
-    });
-    console.log('Connection to MongoDB established');
+async function cleanup() {
+    title('Cleanup');
+    await mongo.disconnect();
+    await discord.disconnect();
+    await dota.disconnect();
+    await steam.disconnect();
 }
 
 async function bootstrap() {
-    await discordBootstrap();
-    await mongooseBootstrap();
+    await mongo.bootstrap();
+    await discord.bootstrap();
     await dota.connect(await steam.connect());
 }
+
+process.on('SIGINT', cleanup);
 
 bootstrap();

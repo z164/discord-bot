@@ -1,4 +1,4 @@
-import UserModel from '../entities/User';
+import UserModel, {IUser} from '../entities/User';
 import GuildModel from '../entities/Guild';
 
 import {Message} from 'discord.js';
@@ -7,6 +7,7 @@ import {parse, title, themes, separator} from './util/logUtilities';
 
 import validateSteam32ID from './util/validateSteam32ID';
 import fetch64ID from './util/fetch64ID';
+import getUserFromMention from './util/getUserFromMention';
 
 export default async (message: Message, body: string[]) => {
     title('Set');
@@ -14,12 +15,6 @@ export default async (message: Message, body: string[]) => {
         console.log(parse('Set was invoked by non-administrator user', themes.error));
         console.log(separator);
         message.channel.send('You need administrator permissions on server to do this');
-        return;
-    }
-    if (!message.mentions.users.first()) {
-        console.log(parse('No user was mentioned', themes.error));
-        console.log(separator);
-        message.channel.send('No user mentioned');
         return;
     }
     body.shift();
@@ -31,17 +26,15 @@ export default async (message: Message, body: string[]) => {
         message.channel.send('Please provide valid Steam32 ID');
         return;
     }
-    let idToSet = message.mentions.users.first().id;
-    if (idToSet === message.guild.ownerID) {
-        console.log(parse("Mentioned user is a guild owner. Using bot's id to proceed", themes.warning));
-        idToSet = message.guild.me.id;
+    let user: IUser;
+    try {
+        user = await getUserFromMention(message);
+    } catch {
+        return;
     }
-    const guildObj = await GuildModel.findOne({
-        guildID: message.guild.id,
-    });
     try {
         const res = await UserModel.findOneAndUpdate(
-            {guildID: guildObj._id, discordID: idToSet},
+            {guildID: user.guildID, discordID: user.discordID},
             {steam32ID: steam32ID, steam64ID: await fetch64ID(steam32ID)}
         );
         if (res === null) {
