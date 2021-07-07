@@ -54,23 +54,27 @@ export default async (client: Client, guildID: string, message: Message = null) 
         const profile = await dota.getProfile(user.steam32ID);
         const rank = parseRank(profile);
         const fetchedMember = await currentGuild.members.fetch(user.discordID);
-        try {
-            fetchedMember.setNickname(`${user.nickname} [${rank}]`, 'Nickname changed due to rank update');
-            console.log(
-                parse(
-                    `${parse(user.nickname, themes.nicknameStyle)}'s rank was updated to ${parse(
-                        String(rank),
-                        themes.nicknameStyle
-                    )}`,
-                    themes.log
-                )
-            );
-            if (message === null) {
-                console.log(`${parse('Guild', themes.property)}: ${guildObj.name}`);
-                console.log(`${parse('ID', themes.property)}: ${guildObj.guildID}`);
-            }
-        } catch (err) {
-            console.log(parse("Somehow server owner's nickname was tried to change", themes.error));
+        fetchedMember
+            .setNickname(`${user.nickname} [${rank}]`, 'Nickname changed due to rank update')
+            .then(() => {
+                console.log(
+                    parse(
+                        `${parse(user.nickname, themes.nicknameStyle)}'s rank was updated to ${parse(
+                            String(rank),
+                            themes.nicknameStyle
+                        )}`,
+                        themes.log
+                    )
+                );
+            })
+            .catch(() => {
+                console.log(parse(`${user.nickname} is located higher than bot`, themes.error));
+            });
+        // If update was invoked by schedule we log current guild and id.
+        // If update was invoked by command location is logged in Recieve block
+        if (message === null) {
+            console.log(`${parse('Guild', themes.property)}: ${guildObj.name}`);
+            console.log(`${parse('ID', themes.property)}: ${guildObj.guildID}`);
         }
     }
 };

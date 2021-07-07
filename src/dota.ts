@@ -108,9 +108,9 @@ class Dota {
         });
     }
 
+    // Will be rebuild
     async waitForPlayersSlot(...ids: string[]) {
         ids.push(String(76561198122182030)); // white-lists bot in lobby
-        ids.push(String(76561198083828140)); // white-lists bot in lobby
         return new Promise((resolve, reject) => {
             this.Client.on('practiceLobbyUpdate', async (update: ILobbyUpdate) => {
                 let players: IPlayer[] = [];
@@ -138,6 +138,7 @@ class Dota {
     async startLobby() {
         this.Client.launchPracticeLobby();
     }
+
 }
 
 const instance = new Dota();

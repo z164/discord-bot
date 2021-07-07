@@ -1,8 +1,8 @@
 {
     "name": "discord-bot",
-    "version": "1.0.0",
+    "version": "2.3.0",
     "description": "",
-    "main": "bot.js",
+    "main": "dist/index.js",
     "repository": {
         "url": "https://github.com/z164/discord-bot"
     },

@@ -11,6 +11,7 @@ async function cleanup() {
     await discord.disconnect();
     await dota.disconnect();
     await steam.disconnect();
+    process.exit(0)
 }
 
 async function bootstrap() {
