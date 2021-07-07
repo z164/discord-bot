@@ -11,5 +11,4 @@ export default async (channel: TextChannel | DMChannel | NewsChannel) => {
     );
     console.log(parse('Help was sent', themes.log));
     console.log(separator);
-    throw new Error('Email notification check');
 };
