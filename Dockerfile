@@ -1,4 +1,4 @@
-FROM node:15
+FROM node:16
 
 WORKDIR /discord-bot
 
@@ -8,4 +8,6 @@ RUN npm i
 
 COPY . .
 
-CMD [ "npm", "start" ]
+RUN npm run build
+
+CMD [ "npm", "run", "start:prod" ]
