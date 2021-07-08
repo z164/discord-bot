@@ -1,5 +1,6 @@
 import {join} from 'path';
 import {readFileSync} from 'fs';
+
 import IProfileData from '../../interfaces/profileData';
 
 const pathToRanks = join(process.cwd(), 'src', 'commands', 'util', 'ranks.json');

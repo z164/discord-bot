@@ -1,6 +1,8 @@
 import mongoose, {Document, Schema} from 'mongoose';
 
-export interface IGuild extends Document {
+export interface IGuild extends Document, GuildObj {}
+
+export interface GuildObj {
     guildID: string;
     name: string;
 }

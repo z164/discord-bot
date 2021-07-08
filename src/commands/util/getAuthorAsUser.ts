@@ -1,8 +1,10 @@
 import {Message} from 'discord.js';
+
+import Guild from '../../repository/Guild';
+import User from '../../repository/User';
+
 import {IUser} from '../../entities/User';
 
-import GuildModel from '../../entities/Guild';
-import UserModel from '../../entities/User';
 import {parse, separator, themes} from './logUtilities';
 
 export default async function getAuthorAsUser(message: Message): Promise<IUser> {
@@ -17,7 +19,7 @@ export default async function getAuthorAsUser(message: Message): Promise<IUser> 
         );
         discordID = message.guild.me.id;
     }
-    const guild = await GuildModel.findOne({
+    const guild = await Guild.findOne({
         guildID: message.guild.id,
     });
     if (guild === null) {
@@ -28,7 +30,7 @@ export default async function getAuthorAsUser(message: Message): Promise<IUser> 
         );
         throw new Error('User invoked this command from non-existing in DB guild');
     }
-    const user = await UserModel.findOne({
+    const user = await User.findOne({
         discordID: discordID,
         guildID: guild._id,
     });

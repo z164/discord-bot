@@ -2,7 +2,7 @@ import {Message} from 'discord.js';
 
 import {IUser} from '../entities/User';
 
-import {title, themes, parse} from './util/logUtilities';
+import {title, themes, parse, separator} from './util/logUtilities';
 import getUserFromMention from './util/getUserFromMention';
 
 export default async (message: Message) => {
@@ -22,5 +22,6 @@ export default async (message: Message) => {
             themes.log
         )
     );
+    console.log(separator);
     message.channel.send(`${user.nickname}'s Steam ID is ${user.steam32ID}`);
 };

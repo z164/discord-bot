@@ -1,8 +1,10 @@
 import {Message} from 'discord.js';
-import UserModel from '../entities/User';
-import getUserFromMention from './util/getUserFromMention';
+
+import User from '../repository/User'
+import {IUser} from '../entities/User';
 
 import {title, themes, separator, parse} from './util/logUtilities';
+import getUserFromMention from './util/getUserFromMention';
 
 export default async (message: Message, parameter: boolean) => {
     title('Lock / Unlock');
@@ -12,9 +14,14 @@ export default async (message: Message, parameter: boolean) => {
         message.channel.send('You need administrator permissions on server to do this');
         return;
     }
-    const user = await getUserFromMention(message);
+    let user: IUser;
     try {
-        const res = await UserModel.findOneAndUpdate({discordID: user.discordID}, {canEdit: parameter});
+        user = await getUserFromMention(message);
+    } catch {
+        return;
+    }
+    try {
+        const res = await User.updateOne({discordID: user.discordID}, {canEdit: parameter});
         console.log(
             parse(
                 `${parse(res.nickname, themes.nicknameStyle)} ${
@@ -23,6 +30,7 @@ export default async (message: Message, parameter: boolean) => {
                 themes.log
             )
         );
+        console.log(separator);
         message.channel.send(
             `${res.nickname} ${parameter ? 'can now edit his Steam ID' : 'can no longer edit his Steam ID'}`
         );

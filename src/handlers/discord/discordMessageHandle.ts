@@ -54,7 +54,7 @@ export default async function messageHandle(message: Message) {
             setNicknames(client, message.guild.id, message);
             break;
         case 'edit':
-            editOwnSteam32ID(body, message);
+            editOwnSteam32ID(message, body);
             break;
         case 'help':
             help(message.channel);

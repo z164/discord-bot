@@ -1,15 +1,15 @@
-import UserModel from '../../entities/User';
-import GuildModel from '../../entities/Guild';
+import User from '../../repository/User';
+import Guild from '../../repository/Guild';
 
 import {parse, separator, title, themes} from './logUtilities';
 
 export default async (guildID: string) => {
     title('GuildDelete');
-    const guild = await GuildModel.findOneAndDelete({
+    const guild = await Guild.deleteOne({
         guildID: guildID,
     });
     if (guild !== null) {
-        const res = await UserModel.deleteMany({
+        const res = await User.deleteMany({
             guildID: guild._id,
         });
         console.log(parse(`${res.deletedCount} users cleared from ${guild.name}:${guild.guildID}`, themes.log));

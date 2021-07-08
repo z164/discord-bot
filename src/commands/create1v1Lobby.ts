@@ -1,11 +1,11 @@
-import dota from '../dota';
-
 import {Message} from 'discord.js';
 
-import getUserFromMention from './util/getUserFromMention';
+import dota from '../dota';
+
+import {IUser} from '../entities/User';
 
 import {title} from './util/logUtilities';
-import {IUser} from '../entities/User';
+import getUserFromMention from './util/getUserFromMention';
 import getAuthorAsUser from './util/getAuthorAsUser';
 
 export default async function create1v1Lobby(message: Message) {

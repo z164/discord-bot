@@ -138,7 +138,6 @@ class Dota {
     async startLobby() {
         this.Client.launchPracticeLobby();
     }
-
 }
 
 const instance = new Dota();

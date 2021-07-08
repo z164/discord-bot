@@ -11,13 +11,13 @@ async function cleanup() {
     await discord.disconnect();
     await dota.disconnect();
     await steam.disconnect();
-    process.exit(0)
+    process.exit(0);
 }
 
 async function bootstrap() {
     await mongo.bootstrap();
     await discord.bootstrap();
-    await dota.connect(await steam.connect());
+    await dota.connect(await steam.bootstrap());
 }
 
 process.on('SIGINT', cleanup);

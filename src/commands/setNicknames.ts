@@ -1,13 +1,13 @@
-import {Client, Guild, Message} from 'discord.js';
+import {Client, Message} from 'discord.js';
 
 import dota from '../dota';
 
-import UserModel from '../entities/User';
-import GuildModel from '../entities/Guild';
+import User from '../repository/User'
+import Guild from '../repository/Guild'
 
 import {parse, title, themes, separator} from './util/logUtilities';
 import parseRank from './util/parseRank';
-import fetch64ID from './util/fetch64ID';
+// import fetch64ID from './util/fetch64ID';
 
 export default async (client: Client, guildID: string, message: Message = null) => {
     title('Update');
@@ -17,7 +17,7 @@ export default async (client: Client, guildID: string, message: Message = null) 
         message.channel.send('You need administrator permissions on server to do this');
         return;
     }
-    const guildObj = await GuildModel.findOne({
+    const guildObj = await Guild.findOne({
         guildID: guildID,
     });
     if (guildObj === null) {
@@ -28,10 +28,10 @@ export default async (client: Client, guildID: string, message: Message = null) 
         );
         return;
     }
-    const users = await UserModel.find({
+    const users = await User.findMany({
         guildID: guildObj._id,
     });
-    let currentGuild: Guild;
+    let currentGuild;
     try {
         currentGuild = await client.guilds.fetch(guildID);
     } catch {
@@ -41,16 +41,13 @@ export default async (client: Client, guildID: string, message: Message = null) 
                 themes.error
             )
         );
-        await GuildModel.findOneAndDelete({
+        await Guild.deleteOne({
             guildID: guildID,
         });
         console.log(separator);
         return;
     }
     for (const user of users) {
-        // await UserModel.findByIdAndUpdate(user._id, {
-        //     steam64ID: await fetch64ID(user.steam32ID),
-        // });
         const profile = await dota.getProfile(user.steam32ID);
         const rank = parseRank(profile);
         const fetchedMember = await currentGuild.members.fetch(user.discordID);

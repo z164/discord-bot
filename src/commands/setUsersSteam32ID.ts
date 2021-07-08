@@ -1,13 +1,14 @@
-import UserModel, {IUser} from '../entities/User';
-import GuildModel from '../entities/Guild';
-
 import {Message} from 'discord.js';
 
-import {parse, title, themes, separator} from './util/logUtilities';
+import {IUser} from '../entities/User';
 
+import User from '../repository/User'
+
+import {parse, title, themes, separator} from './util/logUtilities';
 import validateSteam32ID from './util/validateSteam32ID';
-import fetch64ID from './util/fetch64ID';
 import getUserFromMention from './util/getUserFromMention';
+
+// import fetch64ID from './util/fetch64ID';
 
 export default async (message: Message, body: string[]) => {
     title('Set');
@@ -33,9 +34,9 @@ export default async (message: Message, body: string[]) => {
         return;
     }
     try {
-        const res = await UserModel.findOneAndUpdate(
+        const res = await User.updateOne(
             {guildID: user.guildID, discordID: user.discordID},
-            {steam32ID: steam32ID, steam64ID: await fetch64ID(steam32ID)}
+            {steam32ID: steam32ID}
         );
         if (res === null) {
             console.log(parse('Mentioned user is not registered in system', themes.error));

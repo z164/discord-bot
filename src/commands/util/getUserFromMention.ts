@@ -1,7 +1,9 @@
 import {Message} from 'discord.js';
 
-import GuildModel from '../../entities/Guild';
-import UserModel, {IUser} from '../../entities/User';
+import Guild from '../../repository/Guild';
+import User from '../../repository/User';
+
+import {IUser} from '../../entities/User';
 
 import {parse, separator, themes} from './logUtilities';
 
@@ -17,11 +19,19 @@ export default async function getUserFromMention(message: Message): Promise<IUse
         console.log(parse("Mentioned user is a guild owner. Using bot's id to proceed", themes.warning));
         idToGet = message.guild.me.id;
     }
-    const guildObj = await GuildModel.findOne({
+    const guild = await Guild.findOne({
         guildID: message.guild.id,
     });
-    const user = await UserModel.findOne({
-        guildID: guildObj._id,
+    if (guild === null) {
+        console.log(parse('User invoked this command from non-existing in DB guild', themes.error));
+        console.log(separator);
+        message.channel.send(
+            "None of this guild's members are registered in system. Please register before using this command"
+        );
+        throw new Error('User invoked this command from non-existing in DB guild');
+    }
+    const user = await User.findOne({
+        guildID: guild._id,
         discordID: idToGet,
     });
     if (user === null) {

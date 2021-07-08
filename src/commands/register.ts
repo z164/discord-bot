@@ -1,8 +1,9 @@
 import {Message} from 'discord.js';
+import {NativeError} from 'mongoose';
 import {IGuild} from '../entities/Guild';
 
-import UserModel from '../entities/User';
-import GuildModel from '../entities/Guild';
+import User from '../repository/User';
+import Guild from '../repository/Guild';
 
 import {parse, title, themes, separator} from './util/logUtilities';
 import validateSteam32ID from './util/validateSteam32ID';
@@ -38,11 +39,11 @@ export default async (message: Message, body: string[]) => {
         discordID = message.guild.me.id;
     }
     let guild: IGuild;
-    guild = await GuildModel.findOne({
+    guild = await Guild.findOne({
         guildID: guildID,
     });
     if (!guild) {
-        guild = await GuildModel.create({
+        guild = await Guild.create({
             guildID: guildID,
             name: guildName,
         });
@@ -50,7 +51,7 @@ export default async (message: Message, body: string[]) => {
     } else {
         console.log(parse('Guild exists in database', themes.log));
     }
-    const user = await UserModel.findOne({
+    const user = await User.findOne({
         guildID: guild._id,
         discordID: discordID,
     });
@@ -60,33 +61,27 @@ export default async (message: Message, body: string[]) => {
         message.channel.send('You are already registered');
         return;
     }
-    UserModel.create(
-        {
-            guildID: guild._id,
-            discordID: discordID,
-            nickname: nickname,
-            steam32ID: steam32ID,
-            steam64ID: await fetch64ID(steam32ID),
-            canEdit: true,
-        },
-        (err: Error) => {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(
-                    parse(
-                        `${parse(nickname, themes.nicknameStyle)} registered successfully with id ${parse(
-                            String(steam32ID),
-                            themes.nicknameStyle
-                        )}`,
-                        themes.log
-                    )
-                );
-                console.log(separator);
-                message.channel.send(
-                    `Registered successfully:\nID: ${discordID}\nGuildID: ${guild.guildID}\nNickname: ${nickname}\nSteam32ID: ${steam32ID}`
-                );
-            }
-        }
+    await User.create({
+        guildID: guild._id,
+        discordID: discordID,
+        nickname: nickname,
+        steam32ID: steam32ID,
+        steam64ID: await fetch64ID(steam32ID),
+        canEdit: true,
+    }).catch((err: NativeError) => {
+        console.log(parse(`Error creating User: ${err.message}`, themes.error));
+    });
+    console.log(
+        parse(
+            `${parse(nickname, themes.nicknameStyle)} registered successfully with id ${parse(
+                String(steam32ID),
+                themes.nicknameStyle
+            )}`,
+            themes.log
+        )
+    );
+    console.log(separator);
+    message.channel.send(
+        `Registered successfully:\nID: ${discordID}\nGuildID: ${guild.guildID}\nNickname: ${nickname}\nSteam32ID: ${steam32ID}`
     );
 };

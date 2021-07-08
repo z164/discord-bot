@@ -4,7 +4,9 @@ import mongooseLong from 'mongoose-long';
 mongooseLong(mongoose);
 const Long = mongoose.Schema.Types.Long;
 
-export interface IUser extends Document {
+export interface IUser extends Document, UserObj {}
+
+export interface UserObj {
     guildID: Schema.Types.ObjectId;
     discordID: string;
     nickname: string;
