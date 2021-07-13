@@ -1,3 +1,8 @@
 node_modules/
 dist/
 .env
+
+# Pre-tests
+
+tests/
+jest.config.js

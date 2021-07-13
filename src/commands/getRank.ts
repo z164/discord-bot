@@ -1,38 +1,31 @@
 import {Message} from 'discord.js';
 
-import {readFileSync} from 'fs';
-import {join} from 'path';
-
-import dota from '../dota'
-;
+import dota from '../dota';
 import IProfileData from '../interfaces/profileData';
 
 import {parse, separator, themes, title} from './util/logUtilities';
+import parseRank from './util/parseRank';
+
+import validateSteam32ID from './util/validateSteam32ID';
 
 export default async function getRank(message: Message, body: Array<string>) {
     title('getRank');
-    const pathToRanks = join(process.cwd(), 'src', 'commands', 'util', 'ranks.json');
-    const ranks = JSON.parse(readFileSync(pathToRanks, 'utf-8').toString());
-    if (isNaN(Number(body))) {
+    const steam32ID = validateSteam32ID(body.join(' '));
+    if (!steam32ID) {
         console.log(parse('Invalid body provided', themes.error));
         console.log(separator);
         message.channel.send('Invalid body provided');
         return;
     }
-    const profileData: IProfileData = await dota.getProfile(Number(body));
+    const profileData: IProfileData = await dota.getProfile(steam32ID);
     if (profileData.rank_tier === null) {
         console.log(parse('Bad profile provided', themes.error));
         console.log(separator);
         message.channel.send('Bad profile');
         return;
     }
-    if (profileData.leaderboard_rank !== null) {
-        console.log(parse(`${profileData.leaderboard_rank} fetched`, themes.log));
-        console.log(separator);
-        message.channel.send(profileData.leaderboard_rank);
-        return;
-    }
-    console.log(parse(`${profileData.leaderboard_rank} fetched`, themes.log));
+    const rank = parseRank(profileData);
+    console.log(parse(`${rank} for ${profileData.account_id} fetched`, themes.log));
     console.log(separator);
-    message.channel.send(ranks[profileData.rank_tier]);
+    message.channel.send(rank);
 }

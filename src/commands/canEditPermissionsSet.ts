@@ -1,6 +1,6 @@
 import {Message} from 'discord.js';
 
-import User from '../repository/User'
+import User from '../repository/User';
 import {IUser} from '../entities/User';
 
 import {title, themes, separator, parse} from './util/logUtilities';

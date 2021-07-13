@@ -1,0 +1,17 @@
+version: '3'
+services:
+    node:
+        restart: always
+        build: .
+        env_file:
+            - ./.env
+        environment:
+            - URI=mongodb://mongo:27017/DBot-local
+        volumes:
+            - ./:/code
+    mongo:
+        image: mongo
+        ports:
+            - 27017:27017
+        volumes:
+            - ./db/:/data/db

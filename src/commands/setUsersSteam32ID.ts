@@ -2,7 +2,7 @@ import {Message} from 'discord.js';
 
 import {IUser} from '../entities/User';
 
-import User from '../repository/User'
+import User from '../repository/User';
 
 import {parse, title, themes, separator} from './util/logUtilities';
 import validateSteam32ID from './util/validateSteam32ID';
@@ -34,10 +34,7 @@ export default async (message: Message, body: string[]) => {
         return;
     }
     try {
-        const res = await User.updateOne(
-            {guildID: user.guildID, discordID: user.discordID},
-            {steam32ID: steam32ID}
-        );
+        const res = await User.updateOne({guildID: user.guildID, discordID: user.discordID}, {steam32ID: steam32ID});
         if (res === null) {
             console.log(parse('Mentioned user is not registered in system', themes.error));
             console.log(separator);

@@ -34,7 +34,7 @@ class User {
     }
 
     async deleteMany(query: FilterQuery<IUser>) {
-        return this.model.deleteMany(query)
+        return this.model.deleteMany(query);
     }
 }
 

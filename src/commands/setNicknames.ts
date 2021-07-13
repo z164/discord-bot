@@ -2,8 +2,8 @@ import {Client, Message} from 'discord.js';
 
 import dota from '../dota';
 
-import User from '../repository/User'
-import Guild from '../repository/Guild'
+import User from '../repository/User';
+import Guild from '../repository/Guild';
 
 import {parse, title, themes, separator} from './util/logUtilities';
 import parseRank from './util/parseRank';

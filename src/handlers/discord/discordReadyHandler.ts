@@ -5,7 +5,6 @@ import {client} from '../../discord';
 import setNicknames from '../../commands/setNicknames';
 import {IGuild} from '../../entities/Guild';
 
-
 export default async function ReadyHandler() {
     schedule.scheduleJob(
         {

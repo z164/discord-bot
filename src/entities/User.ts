@@ -1,4 +1,5 @@
 import mongoose, {Schema, model, Document} from 'mongoose';
+import {Types} from 'mongoose';
 import mongooseLong from 'mongoose-long';
 
 mongooseLong(mongoose);
@@ -7,7 +8,7 @@ const Long = mongoose.Schema.Types.Long;
 export interface IUser extends Document, UserObj {}
 
 export interface UserObj {
-    guildID: Schema.Types.ObjectId;
+    guildID: Types.ObjectId;
     discordID: string;
     nickname: string;
     steam32ID: number;

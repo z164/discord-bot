@@ -12,7 +12,7 @@ class Mongo {
     }
 
     async connect() {
-        await this.mongoose.connect(process.env.URI || '', {
+        await this.mongoose.connect(process.env.NODE_ENV === 'test' ? process.env.TEST_URI : process.env.URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useFindAndModify: false,
@@ -25,8 +25,12 @@ class Mongo {
     }
 
     async bootstrap() {
-        this.connect();
+        await this.connect();
         title('MongoDB ready');
+    }
+
+    getClient() {
+        return this.mongoose;
     }
 }
 

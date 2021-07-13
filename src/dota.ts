@@ -24,19 +24,18 @@ class Dota {
         title('Dota disconnected');
     }
 
-    async getProfile(id: number): Promise<IProfileData> {
-        return new Promise((resolve, reject) => {
+    async getProfile(
+        id: number
+        // | number[]
+    ): Promise<IProfileData> {
+        // if(Array.isArray(id)) {
+
+        // }
+        return new Promise((resolve) => {
             this.Client.requestProfileCard(id, (accountID: number, profileData: IProfileData) => {
                 resolve(profileData);
             });
         });
-
-        // return new Promise((resolve, reject) => {
-        //     this.Client.requestProfileCard(id);
-        //     this.Client.once('profileCardData', function (accountId: any, profileData: profileData) {
-        //         resolve(profileData);
-        //     });
-        // });
     }
 
     async createLobby() {

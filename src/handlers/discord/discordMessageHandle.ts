@@ -48,34 +48,35 @@ export default async function messageHandle(message: Message) {
     console.log(separator);
     switch (command) {
         case 'register':
-            register(message, body);
+            await register(message, body);
             break;
         case 'update':
-            setNicknames(client, message.guild.id, message);
+            await setNicknames(client, message.guild.id, message);
             break;
         case 'edit':
-            editOwnSteam32ID(message, body);
+            await editOwnSteam32ID(message, body);
             break;
         case 'help':
-            help(message.channel);
+            await help(message.channel);
             break;
         case 'lock':
-            canEditPermissionsSet(message, false);
+            await canEditPermissionsSet(message, false);
             break;
         case 'unlock':
-            canEditPermissionsSet(message, true);
+            await canEditPermissionsSet(message, true);
             break;
         case 'get':
-            getUsersSteam32ID(message);
+            await getUsersSteam32ID(message);
             break;
         case 'set':
-            setUsersSteam32ID(message, body);
+            await setUsersSteam32ID(message, body);
             break;
+        case 'gr': // alias for getRank
         case 'getRank':
-            getRank(message, body);
+            await getRank(message, body);
             break;
         case 'zxc':
-            create1v1Lobby(message);
+            await create1v1Lobby(message);
             break;
         default:
             message.channel.send('Unknown command');
