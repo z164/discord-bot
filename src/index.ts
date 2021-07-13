@@ -3,7 +3,7 @@ import steam from './steam';
 import dota from './dota';
 import mongo from './mongo';
 
-import {title} from './commands/util/logUtilities';
+import {separator, title} from './commands/util/logUtilities';
 
 async function cleanup() {
     title('Cleanup');
@@ -11,6 +11,7 @@ async function cleanup() {
     await discord.disconnect();
     await dota.disconnect();
     await steam.disconnect();
+    console.log(separator);
     process.exit(0);
 }
 
@@ -21,5 +22,6 @@ async function bootstrap() {
 }
 
 process.on('SIGINT', cleanup);
+process.on('SIGTERM', cleanup);
 
 bootstrap();

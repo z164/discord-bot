@@ -8,12 +8,11 @@
     },
     "scripts": {
         "start": "NODE_ENV=development npx ts-node src/index.ts",
-        "test": "npx jest --forceExit",
         "start:dev": "NODE_ENV=development npx ts-node-dev src/index.ts",
-        "build": "npx tsc --build",
-        "prettier": "npx prettier -w src",
         "start:prod": "NODE_ENV=production node dist/index.js",
-        "nodemon": "nodemon src/index.ts"
+        "test": "npx jest --forceExit",
+        "build": "npx tsc --build",
+        "prettier": "npx prettier -w src"
     },
     "author": "z164",
     "license": "ISC",
