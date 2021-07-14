@@ -28,6 +28,13 @@ export default async (client: Client, guildID: string, message: Message = null) 
         );
         return;
     }
+    // If update was invoked by schedule we log current guild and id.
+    // If update was invoked by command location is logged in Recieve block
+    if (message === null) {
+        console.log(`${parse('Guild', themes.property)}: ${guildObj.name}`);
+        console.log(`${parse('ID', themes.property)}: ${guildObj.guildID}`);
+    }
+    await message.react('👌')
     const users = await User.findMany({
         guildID: guildObj._id,
     });
@@ -67,13 +74,5 @@ export default async (client: Client, guildID: string, message: Message = null) 
             .catch(() => {
                 console.log(parse(`${user.nickname} is located higher than bot`, themes.error));
             });
-    }
-
-    // If update was invoked by schedule we log current guild and id.
-    // If update was invoked by command location is logged in Recieve block
-
-    if (message === null) {
-        console.log(`${parse('Guild', themes.property)}: ${guildObj.name}`);
-        console.log(`${parse('ID', themes.property)}: ${guildObj.guildID}`);
     }
 };
