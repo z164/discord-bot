@@ -33,8 +33,9 @@ export default async (client: Client, guildID: string, message: Message = null) 
     if (message === null) {
         console.log(`${parse('Guild', themes.property)}: ${guildObj.name}`);
         console.log(`${parse('ID', themes.property)}: ${guildObj.guildID}`);
+    } else {
+        await message.react('👌');
     }
-    await message.react('👌');
     const users = await User.findMany({
         guildID: guildObj._id,
     });
