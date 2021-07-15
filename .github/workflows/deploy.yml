@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  Deploy application:
+  Deploy-application:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to ssh server
