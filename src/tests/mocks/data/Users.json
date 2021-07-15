@@ -26,7 +26,17 @@
         "canEdit": true,
         "discordID": "235088799074484224",
         "guildID": "60f005d6a24baa54084c1ff6",
-        "nickname": "eorajke",
+        "nickname": "willBeDeletedAfterGuildDelete",
+        "steam32ID": 123562416,
+        "steam64ID": 10000000000001
+    },
+    {
+        "_id": "60f038113761d646fd027984",
+        "__v": 0,
+        "canEdit": true,
+        "discordID": "511136514940469249",
+        "guildID": "601332eb9079da391c028da5",
+        "nickname": "willBeUpdatedAfterUpdateNickname",
         "steam32ID": 123562416,
         "steam64ID": 10000000000001
     }
