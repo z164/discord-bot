@@ -12,6 +12,7 @@ import getAuthorAsUserTest from './commands/util/getAuthorAsUserTest';
 import guildDeleteTest from './commands/util/guildDeleteTest';
 import parseRankTest from './commands/util/parseRankTest';
 import updateNicknameTest from './commands/util/updateNicknameTest';
+import validateSteam32IDTest from './commands/util/validateSteam32IDTest';
 
 describe('Tests', () => {
     beforeAll(async () => {
@@ -33,6 +34,8 @@ describe('Tests', () => {
     describe('parseRank', parseRankTest)
 
     describe('updateNickname', updateNicknameTest)
+
+    describe('validateSteam32ID', validateSteam32IDTest)
 
     describe('canEditPermissionsSet', canEditPermissionsSetTest);
 
