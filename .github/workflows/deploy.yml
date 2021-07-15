@@ -16,7 +16,6 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script : |
             sudo docker stop discord
-            ${{ secrets.SSH_PASSWORD }}
             cd discord-bot
             git pull
             sudo docker rm discord
