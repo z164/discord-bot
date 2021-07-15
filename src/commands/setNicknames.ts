@@ -34,7 +34,7 @@ export default async (client: Client, guildID: string, message: Message = null) 
         console.log(`${parse('Guild', themes.property)}: ${guildObj.name}`);
         console.log(`${parse('ID', themes.property)}: ${guildObj.guildID}`);
     }
-    await message.react('👌')
+    await message.react('👌');
     const users = await User.findMany({
         guildID: guildObj._id,
     });
@@ -72,7 +72,7 @@ export default async (client: Client, guildID: string, message: Message = null) 
                 );
             })
             .catch(() => {
-                console.log(parse(`${user.nickname} is located higher than bot`, themes.error));
+                console.error(parse(`${user.nickname} is located higher than bot`, themes.error));
             });
     }
 };
