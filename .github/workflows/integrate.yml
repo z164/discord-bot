@@ -18,6 +18,17 @@ jobs:
           node-version: 16.x
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.6.0
+      - name: Create .env file
+        run: |
+          touch .env
+          echo BOT_TOKEN_PROD = ${{ secrets.BOT_TOKEN_PROD }} >> .env
+          echo BOT_TOKEN_DEV = ${{ secrets.BOT_TOKEN_DEV }} >> .env
+          echo prefix = ${{ secrets.PREFIX }} >> .env
+          echo URI = ${{ secrets.URI }} >> .env
+          echo TEST_URI = ${{ secrets.TEST_URI }} >> .env
+          echo steam_user = ${{ secrets.STEAM_USER }} >> .env
+          echo steam_pass = ${{ secrets.STEAM_pass }} >> .env
+          echo steam_name = ${{ secrets.STEAM_name }} >> .env
       - name: Install dependencies
         run: npm ci
       - name: Run tests
