@@ -11,6 +11,7 @@ import getUserFromMentionTest from './commands/util/getUserFromMentionTest';
 import getAuthorAsUserTest from './commands/util/getAuthorAsUserTest';
 import guildDeleteTest from './commands/util/guildDeleteTest';
 import parseRankTest from './commands/util/parseRankTest';
+import updateNicknameTest from './commands/util/updateNicknameTest';
 
 describe('Tests', () => {
     beforeAll(async () => {
@@ -30,6 +31,8 @@ describe('Tests', () => {
     describe('guildDelete', guildDeleteTest)
 
     describe('parseRank', parseRankTest)
+
+    describe('updateNickname', updateNicknameTest)
 
     describe('canEditPermissionsSet', canEditPermissionsSetTest);
 
