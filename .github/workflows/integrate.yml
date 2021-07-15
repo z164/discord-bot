@@ -1,13 +1,11 @@
 name: Discord-Bot CI Pipeline
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
 jobs:
-  test:
+  Test application:
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
