@@ -16,11 +16,11 @@ export default () => {
             })
         ).toBeFalsy();
     });
-    it('Should cleanup guild\'s users if guild was deleted', async () => {
+    it("Should cleanup guild's users if guild was deleted", async () => {
         expect(
             await User.findMany({
-                guildID: '60f005d6a24baa54084c1ff6'
+                guildID: '60f005d6a24baa54084c1ff6',
             })
-        ).toHaveLength(0)
-    })
+        ).toHaveLength(0);
+    });
 };
