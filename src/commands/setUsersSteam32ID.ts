@@ -53,8 +53,6 @@ export default async (message: Message, body: string[]) => {
             message.channel.send(`Changed ${res.nickname}'s Steam32 ID to ${bodyStr}`);
         }
     } catch (err) {
-        if (err) {
-            console.log(err);
-        }
+        console.log(err);
     }
 };

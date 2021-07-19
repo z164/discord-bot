@@ -5,7 +5,8 @@ import IProfileData from '../../interfaces/profileData';
 export default function parseRank(
     profileData: IProfileData
     // | IProfileData[]
-): string | {account_id: number; rank: number | string}[] {
+): string {
+    //  | {account_id: number; rank: number | string}[]
     // Array logic
 
     // if (Array.isArray(profileData)) {
