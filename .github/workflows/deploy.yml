@@ -15,11 +15,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script : |
-            sudo docker stop discord
+            docker stop discord
             cd discord-bot
             git pull
-            sudo docker rm discord
-            sudo docker rmi discord-bot
-            sudo docker build -t "discord-bot" .
-            sudo docker run -d --restart=always --name=discord discord-bot
+            docker rm discord
+            docker rmi discord-bot
+            docker build -t "discord-bot" .
+            docker run -d --restart=always --name=discord discord-bot
             exit
