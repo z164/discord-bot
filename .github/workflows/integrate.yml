@@ -22,7 +22,6 @@ jobs:
           echo BOT_TOKEN_PROD = ${{ secrets.BOT_TOKEN_PROD }} >> .env
           echo BOT_TOKEN_DEV = ${{ secrets.BOT_TOKEN_DEV }} >> .env
           echo prefix = ${{ secrets.PREFIX }} >> .env
-          echo URI = ${{ secrets.URI }} >> .env
           echo TEST_URI = ${{ secrets.TEST_URI }} >> .env
           echo steam_user = ${{ secrets.STEAM_USER }} >> .env
           echo steam_pass = ${{ secrets.STEAM_pass }} >> .env
