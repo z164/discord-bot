@@ -7,6 +7,7 @@ import Guild from '../repository/Guild';
 
 import {parse, title, themes, separator} from './util/logUtilities';
 import parseRank from './util/parseRank';
+import safeFetchMember from './util/safeFetchMember';
 // import fetch64ID from './util/fetch64ID';
 
 export default async (client: Client, guildID: string, message: Message = null) => {
@@ -58,7 +59,16 @@ export default async (client: Client, guildID: string, message: Message = null) 
     for (const user of users) {
         const profile = await dota.getProfile(user.steam32ID);
         const rank = parseRank(profile);
-        const fetchedMember = await currentGuild.members.fetch(user.discordID);
+        const fetchedMember = await safeFetchMember(currentGuild, user.discordID)
+        if(!fetchedMember) {
+            console.log(
+                parse(
+                    `${parse(user.nickname, themes.nicknameStyle)} is not present at current guild`,
+                    themes.error
+                )
+            );
+            continue
+        }
         fetchedMember
             .setNickname(`${user.nickname} [${rank}]`, 'Nickname changed due to rank update')
             .then(() => {
