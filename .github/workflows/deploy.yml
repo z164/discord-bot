@@ -13,6 +13,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
+          passphrase: $ {{ secrets.SSH_KEY_PASSPHRASE }}
           script : |
             docker stop discord
             cd discord-bot
