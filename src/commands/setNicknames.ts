@@ -59,15 +59,16 @@ export default async (client: Client, guildID: string, message: Message = null) 
     for (const user of users) {
         const profile = await dota.getProfile(user.steam32ID);
         const rank = parseRank(profile);
-        const fetchedMember = await safeFetchMember(currentGuild, user.discordID)
-        if(!fetchedMember) {
+        const fetchedMember = await safeFetchMember(currentGuild, user.discordID);
+        if (!fetchedMember) {
             console.log(
-                parse(
-                    `${parse(user.nickname, themes.nicknameStyle)} is not present at current guild`,
-                    themes.error
-                )
+                parse(`${parse(user.nickname, themes.nicknameStyle)} is not present at current guild`, themes.error)
             );
-            continue
+            await User.deleteOne(user._id);
+            console.log(
+                parse(`${parse(user.nickname, themes.nicknameStyle)} is removed from database`, themes.warning)
+            );
+            continue;
         }
         fetchedMember
             .setNickname(`${user.nickname} [${rank}]`, 'Nickname changed due to rank update')

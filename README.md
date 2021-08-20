@@ -2,7 +2,7 @@
 
 Main purpose of this bot is to upgrade ranks of Dota 2 players on discord server
 
-# Version 2.0 release
+# Version 2.5.2
 
 #### Invitation link
 
