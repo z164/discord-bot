@@ -36,6 +36,13 @@ class User {
     async deleteMany(query: FilterQuery<IUser>) {
         return this.model.deleteMany(query);
     }
+
+    async deleteOne(query: FilterQuery<IUser> | Types.ObjectId) {
+        if(query instanceof Types.ObjectId) {
+            return this.model.findByIdAndDelete(query)
+        }
+        return this.model.deleteOne(query)
+    }
 }
 
 export default new User(UserModel);
