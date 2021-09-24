@@ -50,5 +50,6 @@ describe('Tests', () => {
 
     afterAll(async () => {
         await mongo.getClient().connection.db.dropDatabase();
+        await mongo.disconnect();
     });
 });
