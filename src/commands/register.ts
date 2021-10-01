@@ -5,37 +5,33 @@ import {IGuild} from '../entities/Guild';
 import User from '../repository/User';
 import Guild from '../repository/Guild';
 
-import {parse, title, themes, separator} from './util/logUtilities';
+import {parse, THEMES} from './util/logUtilities';
 import validateSteam32ID from './util/validateSteam32ID';
 import fetch64ID from './util/fetch64ID';
+import loggerService from '../services/loggerService';
 
-export default async (message: Message, body: string[]) => {
-    title('Register');
+export default async (message: Message, body: string[]): Promise<void> => {
+    loggerService.title('Register');
     let discordID = message.member.user.id;
     let steam32ID: string | false | number = body.join(' ').trim();
     const nickname = message.member.nickname ?? message.member.user.username;
     const guildID = message.guild.id;
     const guildName = message.guild.name;
     if (steam32ID === '') {
-        console.log(parse('No Steam32 ID provided', themes.error));
-        console.log(separator);
+        loggerService.error('No Steam32 ID provided');
+        loggerService.separator();
         message.channel.send('No Steam32 ID provided');
         return;
     }
     steam32ID = validateSteam32ID(steam32ID);
     if (!steam32ID) {
-        console.log(parse('Bad ID provided', themes.error));
-        console.log(separator);
+        loggerService.error('Bad ID provided');
+        loggerService.separator();
         message.channel.send('Please provide valid Steam32 ID');
         return;
     }
     if (message.author.id === message.guild.ownerID) {
-        console.log(
-            parse(
-                `${parse(nickname, themes.nicknameStyle)} is a guild owner. Using bot's id to proceed`,
-                themes.warning
-            )
-        );
+        loggerService.warning(`${parse(nickname, THEMES.NICKNAME_STYLE)} is a guild owner. Using bot's id to proceed`);
         discordID = message.guild.me.id;
     }
     let guild: IGuild;
@@ -47,17 +43,17 @@ export default async (message: Message, body: string[]) => {
             guildID: guildID,
             name: guildName,
         });
-        console.log(parse('Guild did not exist in database, so it was created', themes.warning));
+        loggerService.warning('Guild did not exist in database, so it was created');
     } else {
-        console.log(parse('Guild exists in database', themes.log));
+        loggerService.log('Guild exists in database');
     }
     const user = await User.findOne({
         guildID: guild._id,
         discordID: discordID,
     });
     if (user) {
-        console.log(parse('User is already registered', themes.error));
-        console.log(separator);
+        loggerService.error('User is already registered');
+        loggerService.separator();
         message.channel.send('You are already registered');
         return;
     }
@@ -69,18 +65,15 @@ export default async (message: Message, body: string[]) => {
         steam64ID: await fetch64ID(steam32ID),
         canEdit: true,
     }).catch((err: NativeError) => {
-        console.log(parse(`Error creating User: ${err.message}`, themes.error));
+        loggerService.error(`Error creating User: ${err.message}`);
     });
-    console.log(
-        parse(
-            `${parse(nickname, themes.nicknameStyle)} registered successfully with id ${parse(
-                String(steam32ID),
-                themes.nicknameStyle
-            )}`,
-            themes.log
-        )
+    loggerService.log(
+        `${parse(nickname, THEMES.NICKNAME_STYLE)} registered successfully with id ${parse(
+            String(steam32ID),
+            THEMES.NICKNAME_STYLE
+        )}`
     );
-    console.log(separator);
+    loggerService.separator();
     message.channel.send(
         `Registered successfully:\nID: ${discordID}\nGuildID: ${guild.guildID}\nNickname: ${nickname}\nSteam32ID: ${steam32ID}`
     );

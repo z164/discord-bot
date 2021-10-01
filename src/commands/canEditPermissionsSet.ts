@@ -3,14 +3,15 @@ import {Message} from 'discord.js';
 import User from '../repository/User';
 import {IUser} from '../entities/User';
 
-import {title, themes, separator, parse} from './util/logUtilities';
+import {THEMES, parse} from './util/logUtilities';
 import getUserFromMention from './util/getUserFromMention';
+import loggerService from '../services/loggerService';
 
-export default async (message: Message, parameter: boolean) => {
-    title('Lock / Unlock');
+export default async (message: Message, parameter: boolean): Promise<void> => {
+    loggerService.title('Lock / Unlock');
     if (!message.member.hasPermission('ADMINISTRATOR')) {
-        console.log(parse('Lock / Unlock was invoked by non-administrator user', themes.error));
-        console.log(separator);
+        loggerService.error('Lock / Unlock was invoked by non-administrator user');
+        loggerService.separator();
         message.channel.send('You need administrator permissions on server to do this');
         return;
     }
@@ -22,15 +23,12 @@ export default async (message: Message, parameter: boolean) => {
     }
     try {
         const res = await User.updateOne({discordID: user.discordID}, {canEdit: parameter});
-        console.log(
-            parse(
-                `${parse(res.nickname, themes.nicknameStyle)} ${
-                    parameter ? 'can now edit his Steam ID' : 'can no longer edit his Steam ID'
-                }`,
-                themes.log
-            )
+        loggerService.log(
+            `${parse(res.nickname, THEMES.NICKNAME_STYLE)} ${
+                parameter ? 'can now edit his Steam ID' : 'can no longer edit his Steam ID'
+            }`
         );
-        console.log(separator);
+        loggerService.separator();
         message.channel.send(
             `${res.nickname} ${parameter ? 'can now edit his Steam ID' : 'can no longer edit his Steam ID'}`
         );

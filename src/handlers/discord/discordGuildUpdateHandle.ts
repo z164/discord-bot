@@ -2,14 +2,14 @@ import {Guild} from 'discord.js';
 
 import GuildModel from '../../repository/Guild';
 
-import {parse, themes, title} from '../../commands/util/logUtilities';
+import loggerService from '../../services/loggerService';
 
-export default async function guildUpdateHandle(oldGuild: Guild, newGuild: Guild) {
-    title('Guild update');
+export default async function guildUpdateHandle(oldGuild: Guild, newGuild: Guild): Promise<void> {
+    loggerService.title('Guild update');
     if (oldGuild.name === newGuild.name) {
-        console.log(parse('Guild update did not affect name of guild', themes.warning));
+        loggerService.warning('Guild update did not affect name of guild');
         return;
     }
     await GuildModel.updateOne({guildID: newGuild.id}, {name: newGuild.name});
-    console.log(parse(`Guild ${oldGuild.name} updated it's name to ${newGuild.name}`, themes.log));
+    loggerService.log(`Guild ${oldGuild.name} updated it's name to ${newGuild.name}`);
 }

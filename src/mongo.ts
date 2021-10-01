@@ -1,6 +1,6 @@
 import mongoose, {Mongoose} from 'mongoose';
 import * as dotenv from 'dotenv';
-import {title} from './commands/util/logUtilities';
+import loggerService from './services/loggerService';
 
 dotenv.config();
 
@@ -21,12 +21,12 @@ class Mongo {
 
     async disconnect() {
         await this.mongoose.disconnect();
-        title('Mongo disconnected');
+        loggerService.title('Mongo disconnected');
     }
 
     async bootstrap() {
         await this.connect();
-        title('MongoDB ready');
+        loggerService.title('MongoDB ready');
     }
 
     getClient() {

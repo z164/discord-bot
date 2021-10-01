@@ -1,19 +1,19 @@
 import {ILobbyUpdate, IPlayer} from './interfaces/lobby';
 import IProfileData from './interfaces/profileData';
 
-import {parse, themes, title} from './commands/util/logUtilities';
+import loggerService from './services/loggerService';
 
 const dota = require('dota2');
 
 class Dota {
     private Client: any;
 
-    async connect(steamClient: any) {
+    async connect(steamClient: any): Promise<string> {
         this.Client = new dota.Dota2Client(steamClient, false);
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             this.Client.launch();
             this.Client.once('ready', () => {
-                title('Dota ready');
+                loggerService.title('Dota ready');
                 resolve('Dota client is ready');
             });
         });
@@ -21,7 +21,7 @@ class Dota {
 
     async disconnect() {
         this.Client.exit();
-        title('Dota disconnected');
+        loggerService.title('Dota disconnected');
     }
 
     async getProfile(
@@ -53,6 +53,7 @@ class Dota {
                     pass_key: 'f4c02405',
                     allchat: true,
                 },
+                // eslint-disable-next-line
                 (err: Error, practiceLobbyUpdate: ILobbyUpdate) => {
                     if (err) {
                         reject(err);
@@ -70,7 +71,7 @@ class Dota {
     }
 
     async destroyLobby() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             this.Client.destroyLobby();
             this.Client.once('lobbyDestroyed', () => {
                 resolve('Lobby destroyed');
@@ -79,9 +80,9 @@ class Dota {
     }
 
     async inviteToLobby(steam64ID: string) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             this.Client.inviteToLobby(steam64ID);
-            console.log(parse(`Sent invite to ${steam64ID}`, themes.log));
+            loggerService.log(`Sent invite to ${steam64ID}`);
             resolve(null);
             // this.Client.once('practiceLobbyUpdate', (update: ILobbyUpdate) => {
             //     console.log(update.all_members);
@@ -110,9 +111,9 @@ class Dota {
     // Will be rebuild
     async waitForPlayersSlot(...ids: string[]) {
         ids.push(String(76561198122182030)); // white-lists bot in lobby
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             this.Client.on('practiceLobbyUpdate', async (update: ILobbyUpdate) => {
-                let players: IPlayer[] = [];
+                const players: IPlayer[] = [];
                 update.all_members.forEach((member) => {
                     if (member.id === null) {
                         // Sometimes undefined member sneaks into lobby

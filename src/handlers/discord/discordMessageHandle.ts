@@ -13,9 +13,10 @@ import create1v1Lobby from '../../commands/create1v1Lobby';
 
 import help from '../../commands/help';
 
-import {parse, separator, themes, title} from '../../commands/util/logUtilities';
+import {parse, THEMES} from '../../commands/util/logUtilities';
+import loggerService from '../../services/loggerService';
 
-export default async function messageHandle(message: Message) {
+export default async function messageHandle(message: Message): Promise<void> {
     if (message.author.bot) {
         return;
     }
@@ -23,29 +24,26 @@ export default async function messageHandle(message: Message) {
     if (prefix !== process.env.prefix) {
         return;
     }
-    title('Recieve');
-    console.log(`${parse('Command', themes.property)}: ${command}`);
+    loggerService.title('Recieve');
+    console.log(`${parse('Command', THEMES.PROPERTY)}: ${command}`);
     console.log(
         body.join(' ').trim() === ''
-            ? parse('No body provided', themes.warning)
-            : `${parse('Body', themes.property)}: ${body.join(' ').trim()}`
+            ? parse('No body provided', THEMES.WARNING)
+            : `${parse('Body', THEMES.PROPERTY)}: ${body.join(' ').trim()}`
     );
     if (message.channel instanceof DMChannel) {
-        console.log(
-            parse(
-                `${message.channel.recipient.username}#${message.channel.recipient.discriminator} tried to DM bot`,
-                themes.warning
-            )
+        loggerService.warning(
+            `${message.channel.recipient.username}#${message.channel.recipient.discriminator} tried to DM bot`
         );
-        console.log(separator);
+        loggerService.separator();
         message.channel.send('DMs are currently not supported');
         return;
     }
-    console.log(`${parse('Location', themes.property)}: ${message.guild.name}`);
-    console.log(`${parse('ID', themes.property)}: ${message.guild.id}`);
-    console.log(`${parse('Author', themes.property)}: ${message.member.nickname}`);
-    console.log(`${parse('ID', themes.property)}: ${message.author.id}`);
-    console.log(separator);
+    console.log(`${parse('Location', THEMES.PROPERTY)}: ${message.guild.name}`);
+    console.log(`${parse('ID', THEMES.PROPERTY)}: ${message.guild.id}`);
+    console.log(`${parse('Author', THEMES.PROPERTY)}: ${message.member.nickname}`);
+    console.log(`${parse('ID', THEMES.PROPERTY)}: ${message.author.id}`);
+    loggerService.separator();
     switch (command) {
         case 'register':
             await register(message, body);
