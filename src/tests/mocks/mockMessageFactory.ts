@@ -18,7 +18,7 @@ export default (content: string, administrator = false, id = 'test', guildID = '
             user: {
                 id: id,
             },
-            hasPermission: jest.fn((permissions: string) => {
+            hasPermission: jest.fn(() => {
                 return administrator;
             }),
         },

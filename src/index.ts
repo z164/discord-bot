@@ -3,15 +3,16 @@ import steam from './steam';
 import dota from './dota';
 import mongo from './mongo';
 
-import {separator, title} from './commands/util/logUtilities';
+import loggerService from './services/loggerService';
 
 async function cleanup() {
-    title('Cleanup');
+    loggerService.separator();
+    loggerService.title('Cleanup');
     await mongo.disconnect();
     await discord.disconnect();
     await dota.disconnect();
     await steam.disconnect();
-    console.log(separator);
+    loggerService.separator();
     process.exit(0);
 }
 

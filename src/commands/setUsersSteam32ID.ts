@@ -4,17 +4,18 @@ import {IUser} from '../entities/User';
 
 import User from '../repository/User';
 
-import {parse, title, themes, separator} from './util/logUtilities';
+import {parse, THEMES} from './util/logUtilities';
 import validateSteam32ID from './util/validateSteam32ID';
 import getUserFromMention from './util/getUserFromMention';
+import loggerService from '../services/loggerService';
 
 // import fetch64ID from './util/fetch64ID';
 
-export default async (message: Message, body: string[]) => {
-    title('Set');
+export default async (message: Message, body: string[]): Promise<void> => {
+    loggerService.title('Set');
     if (!message.member.hasPermission('ADMINISTRATOR')) {
-        console.log(parse('Set was invoked by non-administrator user', themes.error));
-        console.log(separator);
+        loggerService.error('Set was invoked by non-administrator user');
+        loggerService.separator();
         message.channel.send('You need administrator permissions on server to do this');
         return;
     }
@@ -22,8 +23,8 @@ export default async (message: Message, body: string[]) => {
     const bodyStr = body.join(' ').trim();
     const steam32ID = validateSteam32ID(bodyStr);
     if (!steam32ID) {
-        console.log(parse('Bad ID provided', themes.error));
-        console.log(separator);
+        loggerService.error('Bad ID provided');
+        loggerService.separator();
         message.channel.send('Please provide valid Steam32 ID');
         return;
     }
@@ -36,20 +37,17 @@ export default async (message: Message, body: string[]) => {
     try {
         const res = await User.updateOne({guildID: user.guildID, discordID: user.discordID}, {steam32ID: steam32ID});
         if (res === null) {
-            console.log(parse('Mentioned user is not registered in system', themes.error));
-            console.log(separator);
+            loggerService.error('Mentioned user is not registered in system');
+            loggerService.separator();
             message.channel.send('This user is not registered in system');
         } else {
-            console.log(
-                parse(
-                    `Changed ${parse(res.nickname, themes.nicknameStyle)}'s Steam32 ID to ${parse(
-                        bodyStr,
-                        themes.nicknameStyle
-                    )}`,
-                    themes.log
-                )
+            loggerService.log(
+                `Changed ${parse(res.nickname, THEMES.NICKNAME_STYLE)}'s Steam32 ID to ${parse(
+                    bodyStr,
+                    THEMES.NICKNAME_STYLE
+                )}`
             );
-            console.log(separator);
+            loggerService.separator();
             message.channel.send(`Changed ${res.nickname}'s Steam32 ID to ${bodyStr}`);
         }
     } catch (err) {

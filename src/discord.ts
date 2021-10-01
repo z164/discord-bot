@@ -2,8 +2,7 @@ import * as discord from 'discord.js';
 import * as dotenv from 'dotenv';
 
 import discordHandlers from './handlers/discordHandlers';
-
-import {title} from './commands/util/logUtilities';
+import loggerService from './services/loggerService';
 
 dotenv.config();
 
@@ -16,27 +15,27 @@ export class Discord {
         this.token = token;
     }
 
-    async connect() {
+    async connect(): Promise<void> {
         await this.Client.login(this.token);
     }
 
-    getClient() {
+    getClient(): discord.Client {
         return this.Client;
     }
 
-    async disconnect() {
+    async disconnect(): Promise<void> {
         this.Client.destroy();
-        title('Discord disconnected');
+        loggerService.title('Discord disconnected');
     }
 
-    async bootstrap() {
+    async bootstrap(): Promise<void> {
         await this.connect();
         this.Client.on('message', discordHandlers.messageHandle);
         this.Client.on('guildMemberUpdate', discordHandlers.guildMemberUpdateHandle);
         this.Client.on('guildDelete', discordHandlers.guildDeleteHandle);
         this.Client.on('guildUpdate', discordHandlers.guildUpdateHandle);
         this.Client.on('ready', discordHandlers.readyHandler);
-        title('Discord ready');
+        loggerService.title('Discord ready');
     }
 }
 

@@ -4,12 +4,12 @@ import dota from '../dota';
 
 import {IUser} from '../entities/User';
 
-import {title} from './util/logUtilities';
 import getUserFromMention from './util/getUserFromMention';
 import getAuthorAsUser from './util/getAuthorAsUser';
+import loggerService from '../services/loggerService';
 
-export default async function create1v1Lobby(message: Message) {
-    title('1v1 Lobby');
+export default async function create1v1Lobby(message: Message): Promise<void> {
+    loggerService.title('1v1 Lobby');
     message.channel.send('Will be available soon');
     return;
     let userInvited: IUser, currentUser: IUser;

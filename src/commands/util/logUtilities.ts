@@ -11,23 +11,23 @@ colors.setTheme({
     separator: ['bold', 'red'],
 });
 
-export enum themes {
-    title = 'title',
-    nicknameStyle = 'nicknameStyle',
-    error = 'error',
-    warning = 'warning',
-    log = 'log',
-    property = 'property',
-    separator = 'separator',
+export enum THEMES {
+    TITLE = 'title',
+    NICKNAME_STYLE = 'nicknameStyle',
+    ERROR = 'error',
+    WARNING = 'warning',
+    LOG = 'log',
+    PROPERTY = 'property',
+    SEPARATOR = 'separator',
 }
 
-export const parse = (string: string, theme: themes): string => {
+export const parse = (string: string, theme: THEMES): string => {
     // @ts-ignore
     return string[theme];
 };
 
-export const separator = parse('----------------------------', themes.separator);
+export const separator = parse('----------------------------', THEMES.SEPARATOR);
 
 export const title = (titleName: string) => {
-    console.log(`[${moment(new Date()).format('H:mm:ss').magenta}][${parse(titleName, themes.title)}]`);
+    console.log(`[${moment(new Date()).format('H:mm:ss').magenta}][${parse(titleName, THEMES.TITLE)}]`);
 };
