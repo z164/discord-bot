@@ -1,6 +1,11 @@
+import {Message} from 'discord.js';
+
 export default interface IDBotErrorProperties {
     messageToLog: string;
-    messageToSend: string;
+    layer: string;
+    messageToSend?: string;
+    callback?: Function;
+    discordMessage?: Message;
     type: DBotErrorType;
 }
 
