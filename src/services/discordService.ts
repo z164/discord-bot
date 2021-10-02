@@ -1,4 +1,4 @@
-import {Message, MessageReaction} from 'discord.js';
+import {Client, Message, MessageReaction} from 'discord.js';
 
 import * as dotenv from 'dotenv';
 import DBotError from '../entities/errors/DBotError';
@@ -30,6 +30,10 @@ class DiscordService {
 
     async getUserFromMention(message: Message) {
         return this.fetcherService.fetchUserFromMention(message);
+    }
+
+    async fetchGuild(client: Client, guildID: string) {
+        return this.fetcherService.fetchGuild(client, guildID);
     }
 
     async sendMessage(message: Message, messageToSend: string): Promise<Message> {

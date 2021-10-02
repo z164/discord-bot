@@ -10,12 +10,14 @@ export default class DBotError extends Error {
     readonly callback?: Function;
 
     constructor(properties: IDBotErrorProperties) {
-        super(properties.messageToLog);
+        super();
         this.messageToLog = properties.messageToLog;
         this.layer = properties.layer;
         this.messageToSend = properties.messageToSend;
         this.discordMessage = properties.discordMessage;
         this.type = properties.type;
         this.callback = properties.callback;
+
+        Object.setPrototypeOf(this, DBotError.prototype);
     }
 }
