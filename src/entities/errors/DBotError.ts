@@ -1,14 +1,21 @@
+import {Message} from 'discord.js';
 import IDBotErrorProperties, {DBotErrorType} from '../../interfaces/errorProperties';
 
 export default class DBotError extends Error {
-    private readonly messageToLog: string;
-    private readonly messageToSend?: string;
-    private readonly type: DBotErrorType;
+    readonly messageToLog: string;
+    readonly layer: string;
+    readonly messageToSend?: string;
+    readonly discordMessage?: Message;
+    readonly type: DBotErrorType;
+    readonly callback?: Function;
 
     constructor(properties: IDBotErrorProperties) {
         super(properties.messageToLog);
         this.messageToLog = properties.messageToLog;
+        this.layer = properties.layer;
         this.messageToSend = properties.messageToSend;
+        this.discordMessage = properties.discordMessage;
         this.type = properties.type;
+        this.callback = properties.callback;
     }
 }

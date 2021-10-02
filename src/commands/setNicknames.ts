@@ -57,26 +57,19 @@ export default async (client: Client, guildID: string, message: Message = null):
         const rank = parseRank(profile);
         const fetchedMember = await safeFetchMember(currentGuild, user.discordID);
         if (!fetchedMember) {
-            console.log(
-                parse(`${parse(user.nickname, THEMES.NICKNAME_STYLE)} is not present at current guild`, THEMES.ERROR)
-            );
+            loggerService.error(`${parse(user.nickname, THEMES.NICKNAME_STYLE)} is not present at current guild`);
             await User.deleteOne(user._id);
-            console.log(
-                parse(`${parse(user.nickname, THEMES.NICKNAME_STYLE)} is removed from database`, THEMES.WARNING)
-            );
+            loggerService.warning(`${parse(user.nickname, THEMES.NICKNAME_STYLE)} is removed from database`);
             continue;
         }
         fetchedMember
             .setNickname(`${user.nickname} [${rank}]`, 'Nickname changed due to rank update')
             .then(() => {
-                console.log(
-                    parse(
-                        `${parse(user.nickname, THEMES.NICKNAME_STYLE)}'s rank was updated to ${parse(
-                            String(rank),
-                            THEMES.NICKNAME_STYLE
-                        )}`,
-                        THEMES.LOG
-                    )
+                loggerService.log(
+                    `${loggerService.styleString(user.nickname, THEMES.NICKNAME_STYLE)}'s rank was updated to ${parse(
+                        String(rank),
+                        THEMES.NICKNAME_STYLE
+                    )}`
                 );
             })
             .catch(() => {
