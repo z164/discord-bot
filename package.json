@@ -14,7 +14,7 @@
         "test:cov": "npx jest --coverage --forceExit",
         "build": "npx tsc --build",
         "prettier": "npx prettier -w src",
-        "prepare": "husky install"
+        "eslint": "npx eslint ."
     },
     "author": "z164",
     "license": "ISC",

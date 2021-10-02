@@ -9,11 +9,12 @@
       "plugin:@typescript-eslint/eslint-recommended",
       "plugin:@typescript-eslint/recommended"
     ],
-    "ignorePatterns": ["jest.config.js", "*.d.ts", "tests/", "fetch64ID.ts", "dota.ts", "steam.ts"],
+    "ignorePatterns": ["dist/", "jest.config.js", "*.d.ts", "tests/", "fetch64ID.ts", "dota.ts", "steam.ts"],
     "rules": {
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/no-inferrable-types": "off",
-        "@typescript-eslint/no-var-requires": "off"
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-empty-function": "off"
     }
   }
   
