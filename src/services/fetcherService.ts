@@ -1,4 +1,4 @@
-import {Client, Guild, Message} from 'discord.js';
+import {Client, Guild, GuildMember, Message} from 'discord.js';
 import guildDelete from '../commands/util/guildDelete';
 import {parse, THEMES} from '../commands/util/logUtilities';
 import DBotError from '../entities/errors/DBotError';
@@ -58,7 +58,7 @@ export class FetcherService {
         return user;
     }
 
-    async fetchAuthorAsUser(message: Message) {
+    async fetchAuthorAsUser(message: Message): Promise<IUser> {
         const authorID = this.isGuildOwner(message.member.user.id, message);
         const guild = await GuildRepo.findOne({
             guildID: message.guild.id,
@@ -102,7 +102,13 @@ export class FetcherService {
         }
     }
 
-    async fetchMemberFromGuild(message: Message) {}
+    async fetchMemberFromGuild(guild: Guild, memberID: string): Promise<GuildMember> {
+        try {
+            return await guild.members.fetch(memberID);
+        } catch {
+            return null;
+        }
+    }
 }
 
 export default new FetcherService();

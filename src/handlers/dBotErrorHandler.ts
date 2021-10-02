@@ -2,7 +2,7 @@ import DBotError from '../entities/errors/DBotError';
 import loggerService from '../services/loggerService';
 import discordService from '../services/discordService';
 
-export default async function HandleDBotError(error: DBotError) {
+export default async function HandleDBotError(error: DBotError): Promise<void> {
     if (error.type === 'error') {
         loggerService.error(`${error.layer}: ${error.messageToLog}`);
         loggerService.separator();

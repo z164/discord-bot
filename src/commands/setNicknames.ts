@@ -1,14 +1,11 @@
 import {Client, Message} from 'discord.js';
 
-import dota from '../dota';
-
 import discordService from '../services/discordService';
 
 import User from '../repository/User';
 import Guild from '../repository/Guild';
 
 import {parse, THEMES} from './util/logUtilities';
-import parseRank from './util/parseRank';
 import safeFetchMember from './util/safeFetchMember';
 import loggerService from '../services/loggerService';
 import DBotError from '../entities/errors/DBotError';
@@ -45,27 +42,7 @@ export default async function setNicknames(client: Client, guildID: string, mess
         guildID: guildObj._id,
     });
     for (const user of users) {
-        const profile = await dota.getProfile(user.steam32ID);
-        const rank = parseRank(profile);
         const fetchedMember = await safeFetchMember(currentGuild, user.discordID);
-        if (!fetchedMember) {
-            loggerService.error(`${parse(user.nickname, THEMES.NICKNAME_STYLE)} is not present at current guild`);
-            await User.deleteOne(user._id);
-            loggerService.warning(`${parse(user.nickname, THEMES.NICKNAME_STYLE)} is removed from database`);
-            continue;
-        }
-        fetchedMember
-            .setNickname(`${user.nickname} [${rank}]`, 'Nickname changed due to rank update')
-            .then(() => {
-                loggerService.log(
-                    `${loggerService.styleString(user.nickname, THEMES.NICKNAME_STYLE)}'s rank was updated to ${parse(
-                        String(rank),
-                        THEMES.NICKNAME_STYLE
-                    )}`
-                );
-            })
-            .catch(() => {
-                loggerService.error(`${user.nickname} is located higher than bot`);
-            });
+        await discordService.updateNickname(fetchedMember, user);
     }
 }
