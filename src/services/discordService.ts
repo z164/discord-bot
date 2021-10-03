@@ -1,4 +1,4 @@
-import {Client, Guild, GuildMember, Message, MessageReaction} from 'discord.js';
+import {Client, DiscordAPIError, Guild, GuildMember, Message, MessageReaction} from 'discord.js';
 import * as dotenv from 'dotenv';
 
 import loggerService from './loggerService';
@@ -57,6 +57,26 @@ class DiscordService {
         return message.react(emoji);
     }
 
+    formatNickname(nickname: string, rank: string): string {
+        const MAX_NICKNAME_LENGTH = 32;
+        const DOTS_LENGTH = 3;
+        const SPACE_LENGTH = 1;
+        const rankInBracers = `[${rank}]`;
+        const rankInBracersLength = rankInBracers.length;
+        const nicknameLength = nickname.length;
+        const finalLength = nicknameLength + SPACE_LENGTH + rankInBracersLength;
+        if (finalLength > MAX_NICKNAME_LENGTH) {
+            const allowedNicknameLength =
+                MAX_NICKNAME_LENGTH - DOTS_LENGTH - SPACE_LENGTH - rankInBracersLength;
+            const nicknameCut = nickname.slice(0, allowedNicknameLength) + '...';
+            loggerService.warning(
+                `${nickname}'s nickname was too big.\nIt have been cutted to ${nicknameCut}`
+            );
+            return `${nicknameCut} ${rankInBracers}`;
+        }
+        return `${nickname} ${rankInBracers}`;
+    }
+
     async updateNickname(member: GuildMember, user: IUser) {
         if (!member) {
             loggerService.error(
@@ -70,18 +90,31 @@ class DiscordService {
         }
         const rank = await this.fetcherService.fetchRank(user);
         try {
-            await member.setNickname(
-                `${user.nickname} [${rank}]`,
-                'Nickname changed due to rank update'
-            );
+            const nicknameWithRank = this.formatNickname(user.nickname, rank);
+            if (member.nickname === nicknameWithRank) {
+                // skip here and log message that it was skipped
+                // due not to spam into audit log
+            }
+            await member.setNickname(nicknameWithRank, 'Nickname changed due to rank update');
             loggerService.log(
                 `${loggerService.styleString(
                     user.nickname,
                     THEMES.NICKNAME_STYLE
-                )}'s rank was updated to ${parse(String(rank), THEMES.NICKNAME_STYLE)}`
+                )}'s rank was updated to ${loggerService.styleString(
+                    String(rank),
+                    THEMES.NICKNAME_STYLE
+                )}`
             );
         } catch (error) {
-            loggerService.error(`${user.nickname} is located higher than bot`);
+            if (error instanceof DiscordAPIError) {
+                switch (error.message) {
+                    case 'Missing Permissions':
+                        loggerService.error(`${user.nickname} is located higher than bot`);
+                        break;
+                    default:
+                        loggerService.error(`Unknown error: ${error.message}`);
+                }
+            }
         }
     }
 }
