@@ -30,10 +30,7 @@ export default async (message: Message, body: string[]): Promise<void> => {
         return;
     }
     try {
-        await User.updateOne(
-            {discordID: user.discordID, guildID: user.guildID},
-            {steam32ID: steam32ID}
-        );
+        await User.updateOne({discordID: user.discordID, guildID: user.guildID}, {steam32ID});
         loggerService.log('Steam ID successfully updated');
         loggerService.separator();
         message.channel.send('Your Steam ID was updated successfully');

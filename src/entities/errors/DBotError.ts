@@ -3,10 +3,15 @@ import IDBotErrorProperties, {DBotErrorType} from '../../interfaces/errorPropert
 
 export default class DBotError extends Error {
     readonly messageToLog: string;
+
     readonly layer: string;
+
     readonly messageToSend?: string;
+
     readonly discordMessage?: Message;
+
     readonly type: DBotErrorType;
+
     readonly callback?: Function;
 
     constructor(properties: IDBotErrorProperties) {

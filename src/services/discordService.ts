@@ -68,7 +68,7 @@ class DiscordService {
             );
             return;
         }
-        const rank = this.fetcherService.fetchRank(user);
+        const rank = await this.fetcherService.fetchRank(user);
         try {
             await member.setNickname(
                 `${user.nickname} [${rank}]`,

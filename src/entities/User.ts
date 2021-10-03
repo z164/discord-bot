@@ -1,9 +1,9 @@
-import mongoose, {Schema, model, Document} from 'mongoose';
-import {Types} from 'mongoose';
+import mongoose, {Schema, model, Document, Types} from 'mongoose';
+
 import mongooseLong from 'mongoose-long';
 
 mongooseLong(mongoose);
-const Long = mongoose.Schema.Types.Long;
+const {Long} = mongoose.Schema.Types;
 
 export interface IUser extends Document, UserObj {}
 

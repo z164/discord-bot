@@ -1,5 +1,5 @@
-import {client} from '../../discord';
 import {GuildMember, PartialGuildMember} from 'discord.js';
+import {client} from '../../discord';
 
 import updateNickname from '../../commands/util/updateNickname';
 import loggerService from '../../services/loggerService';
