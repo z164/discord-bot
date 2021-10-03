@@ -38,11 +38,11 @@ export default async (message: Message, body: string[]): Promise<void> => {
     }
     let guild: IGuild;
     guild = await Guild.findOne({
-        guildID: guildID,
+        guildID,
     });
     if (!guild) {
         guild = await Guild.create({
-            guildID: guildID,
+            guildID,
             name: guildName,
         });
         loggerService.warning('Guild did not exist in database, so it was created');
@@ -51,7 +51,7 @@ export default async (message: Message, body: string[]): Promise<void> => {
     }
     const user = await User.findOne({
         guildID: guild._id,
-        discordID: discordID,
+        discordID,
     });
     if (user) {
         loggerService.error('User is already registered');
@@ -61,9 +61,9 @@ export default async (message: Message, body: string[]): Promise<void> => {
     }
     await User.create({
         guildID: guild._id,
-        discordID: discordID,
-        nickname: nickname,
-        steam32ID: steam32ID,
+        discordID,
+        nickname,
+        steam32ID,
         steam64ID: await fetch64ID(steam32ID),
         canEdit: true,
     }).catch((err: NativeError) => {

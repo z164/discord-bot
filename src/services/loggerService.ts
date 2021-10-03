@@ -64,20 +64,15 @@ class LoggerService {
 
     private processTitle(message: string): string {
         if (!this.properties.colors) {
-            return `[${moment(new Date()).format('H:mm:ss')}]` + message;
+            return `[${moment(new Date()).format('H:mm:ss')}]${message}`;
         }
         return (
-            '[' +
-            this.buildThemeString(
+            `[${this.buildThemeString(
                 moment(new Date()).format('H:mm:ss'),
                 loggerServiceConstants.FONTCOLOR.Magenta,
                 '',
                 []
-            ) +
-            ']' +
-            '[' +
-            message +
-            ']'
+            )}]` + `[${message}]`
         );
     }
 

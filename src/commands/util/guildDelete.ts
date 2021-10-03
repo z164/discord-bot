@@ -6,7 +6,7 @@ import loggerService from '../../services/loggerService';
 export default async (guildID: string): Promise<void> => {
     loggerService.title('GuildDelete');
     const guild = await Guild.deleteOne({
-        guildID: guildID,
+        guildID,
     });
     if (guild !== null) {
         const res = await User.deleteMany({

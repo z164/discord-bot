@@ -8,6 +8,7 @@ dotenv.config();
 
 export class Discord {
     private Client: discord.Client;
+
     private token: string;
 
     constructor(token: string) {

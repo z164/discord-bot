@@ -24,7 +24,7 @@ export default async (message: Message, body: string[]): Promise<void> => {
     const user = await discordService.getUserFromMention(message);
     const res = await User.updateOne(
         {guildID: user.guildID, discordID: user.discordID},
-        {steam32ID: steam32ID}
+        {steam32ID}
     );
     if (res === null) {
         loggerService.error('Mentioned user is not registered in system');

@@ -1,15 +1,15 @@
 import {Message} from 'discord.js';
 
-import dota from '../dota';
+// import dota from '../dota';
 
-import {IUser} from '../entities/User';
+// import {IUser} from '../entities/User';
 
 import loggerService from '../services/loggerService';
 
 export default async function create1v1Lobby(message: Message): Promise<void> {
     loggerService.title('1v1 Lobby');
     message.channel.send('Will be available soon');
-    return;
+
     // let userInvited: IUser, currentUser: IUser;
     // try {
     //     // userInvited = await getUserFromMention(message);

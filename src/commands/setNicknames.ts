@@ -20,7 +20,7 @@ export default async function setNicknames(
         discordService.isAdmin(message);
     }
     const guildObj = await Guild.findOne({
-        guildID: guildID,
+        guildID,
     });
     if (guildObj === null) {
         throw new DBotError({
