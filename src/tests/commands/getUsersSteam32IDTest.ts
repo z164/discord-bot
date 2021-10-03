@@ -1,4 +1,4 @@
-import * as getUserFromMention from '../../commands/util/getUserFromMention';
+import discordService from '../../services/discordService';
 
 import getUsersSteam32ID from '../../commands/getUsersSteam32ID';
 
@@ -9,7 +9,7 @@ const _: undefined = undefined;
 
 export default () => {
     it("Should return message with user's Steam 32ID", async () => {
-        jest.spyOn(getUserFromMention, 'default').mockImplementation(async () => {
+        jest.spyOn(discordService, 'getUserFromMention').mockImplementation(async () => {
             return {
                 _id: '601339f597a6a523bce68c7a',
                 __v: 0,

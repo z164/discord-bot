@@ -39,7 +39,8 @@ export class Discord {
     }
 }
 
-const token = process.env.NODE_ENV === 'production' ? process.env.BOT_TOKEN_PROD : process.env.BOT_TOKEN_DEV;
+const token =
+    process.env.NODE_ENV === 'production' ? process.env.BOT_TOKEN_PROD : process.env.BOT_TOKEN_DEV;
 const instance = new Discord(token);
 
 export default instance;

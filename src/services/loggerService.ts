@@ -11,7 +11,12 @@ class LoggerService {
         this.properties = properties;
     }
 
-    private buildThemeString(message: string, font: string, background: string, styles?: string[]): string {
+    private buildThemeString(
+        message: string,
+        font: string,
+        background: string,
+        styles?: string[]
+    ): string {
         let stylesString = '';
         if (styles) {
             for (const style of styles) {
@@ -109,7 +114,11 @@ class LoggerService {
     }
 
     separator(): void {
-        this.logWithProperties('----------------------------', this.properties.layers.separator, THEMES.SEPARATOR);
+        this.logWithProperties(
+            '----------------------------',
+            this.properties.layers.separator,
+            THEMES.SEPARATOR
+        );
     }
 }
 

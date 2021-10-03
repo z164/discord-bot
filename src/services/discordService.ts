@@ -1,4 +1,3 @@
-import dota from '../dota';
 import {Client, Guild, GuildMember, Message, MessageReaction} from 'discord.js';
 import * as dotenv from 'dotenv';
 
@@ -8,7 +7,6 @@ import fetcherService, {FetcherService} from './fetcherService';
 import DBotError from '../entities/errors/DBotError';
 import User, {IUser} from '../entities/User';
 
-import parseRank from '../commands/util/parseRank';
 import {parse, THEMES} from '../commands/util/logUtilities';
 
 dotenv.config();
@@ -21,9 +19,12 @@ class DiscordService {
     }
 
     isAdmin(message: Message): void {
-        if (!message.member.hasPermission('ADMINISTRATOR') && message.author.id !== process.env.BOT_AUTHOR_ID) {
+        if (
+            !message.member.hasPermission('ADMINISTRATOR') &&
+            message.author.id !== process.env.BOT_AUTHOR_ID
+        ) {
             throw new DBotError({
-                messageToLog: 'Lock / Unlock was invoked by non-administrator user',
+                messageToLog: 'Command was invoked by non-administrator user',
                 messageToSend: 'You need administrator permissions on server to do this',
                 type: 'error',
                 layer: this.constructor.name,
@@ -58,20 +59,26 @@ class DiscordService {
 
     async updateNickname(member: GuildMember, user: IUser) {
         if (!member) {
-            loggerService.error(`${parse(user.nickname, THEMES.NICKNAME_STYLE)} is not present at current guild`);
+            loggerService.error(
+                `${parse(user.nickname, THEMES.NICKNAME_STYLE)} is not present at current guild`
+            );
             await User.deleteOne(user._id);
-            loggerService.warning(`${parse(user.nickname, THEMES.NICKNAME_STYLE)} is removed from database`);
+            loggerService.warning(
+                `${parse(user.nickname, THEMES.NICKNAME_STYLE)} is removed from database`
+            );
             return;
         }
-        const profile = await dota.getProfile(user.steam32ID);
-        const rank = parseRank(profile);
+        const rank = this.fetcherService.fetchRank(user);
         try {
-            await member.setNickname(`${user.nickname} [${rank}]`, 'Nickname changed due to rank update');
+            await member.setNickname(
+                `${user.nickname} [${rank}]`,
+                'Nickname changed due to rank update'
+            );
             loggerService.log(
-                `${loggerService.styleString(user.nickname, THEMES.NICKNAME_STYLE)}'s rank was updated to ${parse(
-                    String(rank),
+                `${loggerService.styleString(
+                    user.nickname,
                     THEMES.NICKNAME_STYLE
-                )}`
+                )}'s rank was updated to ${parse(String(rank), THEMES.NICKNAME_STYLE)}`
             );
         } catch (error) {
             loggerService.error(`${user.nickname} is located higher than bot`);

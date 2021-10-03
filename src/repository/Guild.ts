@@ -16,13 +16,15 @@ class Guild {
         if (query instanceof Types.ObjectId) {
             return this.model.findById(query);
         }
+        // @ts-ignore
         return this.model.findOne(query);
     }
 
     async updateOne(query: FilterQuery<IGuild> | Types.ObjectId, update: UpdateQuery<IGuild>) {
         if (query instanceof Types.ObjectId) {
-            return this.model.findById(query);
+            return this.model.findByIdAndUpdate(query, update);
         }
+        // @ts-ignore
         return this.model.findOneAndUpdate(query, update);
     }
 
@@ -34,6 +36,7 @@ class Guild {
         if (query instanceof Types.ObjectId) {
             return this.model.findByIdAndDelete(query);
         }
+        // @ts-ignore
         return this.model.findOneAndDelete(query);
     }
 }

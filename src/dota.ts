@@ -58,12 +58,16 @@ class Dota {
                     if (err) {
                         reject(err);
                     } else {
-                        this.Client.joinPracticeLobbyTeam(0, 4, (err: Error, update: ILobbyUpdate) => {
-                            if (err) {
-                                reject(err);
+                        this.Client.joinPracticeLobbyTeam(
+                            0,
+                            4,
+                            (err: Error, update: ILobbyUpdate) => {
+                                if (err) {
+                                    reject(err);
+                                }
+                                resolve(update);
                             }
-                            resolve(update);
-                        });
+                        );
                     }
                 }
             );

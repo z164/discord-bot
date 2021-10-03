@@ -1,21 +1,15 @@
 import {Message} from 'discord.js';
 
-import {IUser} from '../entities/User';
 import User from '../repository/User';
 
 import validateSteam32ID from './util/validateSteam32ID';
-import getAuthorAsUser from './util/getAuthorAsUser';
 import loggerService from '../services/loggerService';
+import discordService from '../services/discordService';
 
 export default async (message: Message, body: string[]): Promise<void> => {
     loggerService.title('Edit');
     const bodyStr = body.join(' ').trim();
-    let user: IUser;
-    try {
-        user = await getAuthorAsUser(message);
-    } catch {
-        return;
-    }
+    const user = await discordService.getAuthorAsUser(message);
     if (bodyStr === '') {
         loggerService.error('No Steam 32ID proveded');
         loggerService.separator();
@@ -36,7 +30,10 @@ export default async (message: Message, body: string[]): Promise<void> => {
         return;
     }
     try {
-        await User.updateOne({discordID: user.discordID, guildID: user.guildID}, {steam32ID: steam32ID});
+        await User.updateOne(
+            {discordID: user.discordID, guildID: user.guildID},
+            {steam32ID: steam32ID}
+        );
         loggerService.log('Steam ID successfully updated');
         loggerService.separator();
         message.channel.send('Your Steam ID was updated successfully');
