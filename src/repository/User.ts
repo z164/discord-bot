@@ -16,17 +16,22 @@ class User {
         if (query instanceof Types.ObjectId) {
             return this.model.findById(query);
         }
+        // @ts-ignore
         return this.model.findOne(query);
     }
 
     async updateOne(query: FilterQuery<IUser> | Types.ObjectId, update: UpdateQuery<IUser>) {
         if (query instanceof Types.ObjectId) {
-            return this.model.findById(query);
+            return this.model.findByIdAndUpdate(query, update);
         }
+        // @ts-ignore
         return this.model.findOneAndUpdate(query, update);
     }
 
-    async create(user: UserObj, callback?: (err: NativeError, doc: IUser) => void): Promise<IUser | void> {
+    async create(
+        user: UserObj,
+        callback?: (err: NativeError, doc: IUser) => void
+    ): Promise<IUser | void> {
         if (callback) {
             return this.model.create(user, callback);
         }
@@ -41,6 +46,7 @@ class User {
         if (query instanceof Types.ObjectId) {
             return this.model.findByIdAndDelete(query);
         }
+        // @ts-ignore
         return this.model.deleteOne(query);
     }
 }

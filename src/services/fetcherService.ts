@@ -1,11 +1,16 @@
 import {Client, Guild, GuildMember, Message} from 'discord.js';
-import guildDelete from '../commands/util/guildDelete';
-import {parse, THEMES} from '../commands/util/logUtilities';
+import dota from '../dota';
+
+import loggerService from './loggerService';
+
 import DBotError from '../entities/errors/DBotError';
 import {IUser} from '../entities/User';
 import GuildRepo from '../repository/Guild';
 import UserRepo from '../repository/User';
-import loggerService from './loggerService';
+
+import {parse, THEMES} from '../commands/util/logUtilities';
+import guildDelete from '../commands/util/guildDelete';
+import parseRank from '../commands/util/parseRank';
 
 export class FetcherService {
     constructor() {}
@@ -79,8 +84,8 @@ export class FetcherService {
         });
         if (user === null) {
             throw new DBotError({
-                messageToSend: 'This user is not registered in system',
-                messageToLog: 'Mentioned user is not registered in system',
+                messageToSend: 'You are not registered',
+                messageToLog: 'User that invoked this command is not registered',
                 type: 'error',
                 layer: this.constructor.name,
                 discordMessage: message,
@@ -94,7 +99,10 @@ export class FetcherService {
             return await client.guilds.fetch(guildID);
         } catch (error) {
             throw new DBotError({
-                messageToLog: `Couldnt reach ${parse(guildID, THEMES.NICKNAME_STYLE)} guild, removing it from database`,
+                messageToLog: `Couldnt reach ${parse(
+                    guildID,
+                    THEMES.NICKNAME_STYLE
+                )} guild, removing it from database`,
                 type: 'error',
                 layer: this.constructor.name,
                 callback: () => guildDelete(guildID),
@@ -108,6 +116,11 @@ export class FetcherService {
         } catch {
             return null;
         }
+    }
+
+    async fetchRank(user: IUser): Promise<string> {
+        const profile = await dota.getProfile(user.steam32ID);
+        return parseRank(profile);
     }
 }
 

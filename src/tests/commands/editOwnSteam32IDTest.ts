@@ -1,6 +1,7 @@
 import editOwnSteam32ID from '../../commands/editOwnSteam32ID';
 
-import * as getAuthorAsUser from '../../commands/util/getAuthorAsUser';
+import discordService from '../../services/discordService';
+
 import {IUser} from '../../entities/User';
 import User from '../../repository/User';
 
@@ -10,7 +11,7 @@ const _: undefined = undefined;
 
 export default () => {
     it('Should return message if Steam 32ID is not provided', async () => {
-        jest.spyOn(getAuthorAsUser, 'default').mockImplementation(async () => {
+        jest.spyOn(discordService, 'getAuthorAsUser').mockImplementation(async () => {
             return {
                 _id: '601339f597a6a523bce68c7a',
                 __v: 0,
@@ -28,7 +29,7 @@ export default () => {
         expect(message.channel.send).toBeCalledWith('No Steam 32ID provided');
     });
     it('Should return message if user is banned from editing his Steam 32ID', async () => {
-        jest.spyOn(getAuthorAsUser, 'default').mockImplementation(async () => {
+        jest.spyOn(discordService, 'getAuthorAsUser').mockImplementation(async () => {
             return {
                 _id: '601339f597a6a523bce68c7a',
                 __v: 0,
@@ -46,7 +47,7 @@ export default () => {
         expect(message.channel.send).toBeCalledWith('You were banned from editing your Steam ID');
     });
     it('Should return message if everything was provided correctly', async () => {
-        jest.spyOn(getAuthorAsUser, 'default').mockImplementation(async () => {
+        jest.spyOn(discordService, 'getAuthorAsUser').mockImplementation(async () => {
             return {
                 _id: '601339f597a6a523bce68c7a',
                 __v: 0,

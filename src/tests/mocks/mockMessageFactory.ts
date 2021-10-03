@@ -1,6 +1,12 @@
 import {Message} from 'discord.js';
 
-export default (content: string, administrator = false, id = 'test', guildID = 'test', mentionID = 'test'): Message => {
+export default (
+    content: string,
+    administrator = false,
+    id = 'test',
+    guildID = 'test',
+    mentionID = 'test'
+): Message => {
     return {
         author: {
             bot: false,

@@ -1,20 +1,35 @@
 {
     "root": true,
     "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
-    ],
+    "plugins": ["@typescript-eslint"],
     "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
+        "airbnb-base",
+        "airbnb-typescript/base",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
-    "ignorePatterns": ["dist/", "jest.config.js", "*.d.ts", "tests/", "fetch64ID.ts", "dota.ts", "steam.ts"],
+    "ignorePatterns": [
+        "dist/",
+        "jest.config.js",
+        "*.d.ts",
+        "tests/",
+        "fetch64ID.ts",
+        "logUtilities.ts",
+        "dota.ts",
+        "steam.ts"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
     "rules": {
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/no-inferrable-types": "off",
         "@typescript-eslint/no-var-requires": "off",
-        "@typescript-eslint/no-empty-function": "off"
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/object-curly-spacing": "off",
+        "@typescript-eslint/indent": "off",
+        "no-console": "off"
     }
-  }
-  
+}

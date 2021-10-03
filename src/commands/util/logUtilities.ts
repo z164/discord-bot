@@ -29,5 +29,7 @@ export const parse = (string: string, theme: THEMES): string => {
 export const separator = parse('----------------------------', THEMES.SEPARATOR);
 
 export const title = (titleName: string) => {
-    console.log(`[${moment(new Date()).format('H:mm:ss').magenta}][${parse(titleName, THEMES.TITLE)}]`);
+    console.log(
+        `[${moment(new Date()).format('H:mm:ss').magenta}][${parse(titleName, THEMES.TITLE)}]`
+    );
 };

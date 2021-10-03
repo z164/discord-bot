@@ -31,7 +31,9 @@ export default async (message: Message, body: string[]): Promise<void> => {
         return;
     }
     if (message.author.id === message.guild.ownerID) {
-        loggerService.warning(`${parse(nickname, THEMES.NICKNAME_STYLE)} is a guild owner. Using bot's id to proceed`);
+        loggerService.warning(
+            `${parse(nickname, THEMES.NICKNAME_STYLE)} is a guild owner. Using bot's id to proceed`
+        );
         discordID = message.guild.me.id;
     }
     let guild: IGuild;

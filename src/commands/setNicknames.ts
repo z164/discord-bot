@@ -6,12 +6,15 @@ import User from '../repository/User';
 import Guild from '../repository/Guild';
 
 import {parse, THEMES} from './util/logUtilities';
-import safeFetchMember from './util/safeFetchMember';
 import loggerService from '../services/loggerService';
 import DBotError from '../entities/errors/DBotError';
 // import fetch64ID from './util/fetch64ID';
 
-export default async function setNicknames(client: Client, guildID: string, message: Message = null): Promise<void> {
+export default async function setNicknames(
+    client: Client,
+    guildID: string,
+    message: Message = null
+): Promise<void> {
     loggerService.title('Update');
     if (message !== null) {
         discordService.isAdmin(message);
@@ -42,7 +45,7 @@ export default async function setNicknames(client: Client, guildID: string, mess
         guildID: guildObj._id,
     });
     for (const user of users) {
-        const fetchedMember = await safeFetchMember(currentGuild, user.discordID);
+        const fetchedMember = await discordService.fetchMember(currentGuild, user.discordID);
         await discordService.updateNickname(fetchedMember, user);
     }
 }

@@ -1,16 +1,18 @@
 import messageFactory from '../mocks/mockMessageFactory';
 
+import discordService from '../../services/discordService';
+
 import canEditPremissions from '../../commands/canEditPermissionsSet';
 
 import {IUser} from '../../entities/User';
-
-import * as getUserFromMention from '../../commands/util/getUserFromMention';
+import DBotError from '../../entities/errors/DBotError';
+import HandleDBotError from '../../handlers/dBotErrorHandler';
 
 const _: undefined = undefined;
 
 export default () => {
     it('Should return message if non-admin invoked setter', async () => {
-        jest.spyOn(getUserFromMention, 'default').mockImplementation(async () => {
+        jest.spyOn(discordService, 'getUserFromMention').mockImplementation(async () => {
             return {
                 _id: '601339f597a6a523bce68c7a',
                 __v: 0,
@@ -24,22 +26,42 @@ export default () => {
             } as unknown as IUser;
         });
         const message = messageFactory(_, false);
-        await canEditPremissions(message, false);
-        expect(message.member.hasPermission).toBeCalled();
-        expect(message.channel.send).toBeCalledWith('You need administrator permissions on server to do this');
+        try {
+            await canEditPremissions(message, false);
+        } catch (e) {
+            if (e instanceof DBotError) {
+                HandleDBotError(e);
+            }
+            expect(message.member.hasPermission).toBeCalled();
+            expect(message.channel.send).toBeCalledWith(
+                'You need administrator permissions on server to do this'
+            );
+        }
     });
 
     it('Should return if user is not found', async () => {
-        jest.spyOn(getUserFromMention, 'default').mockImplementation(async () => {
-            throw new Error('Test');
+        jest.spyOn(discordService, 'getUserFromMention').mockImplementation(async () => {
+            throw new DBotError({
+                messageToLog: 'Mentioned user is not registered in system',
+                type: 'error',
+                layer: 'test',
+            });
         });
         const message = messageFactory(_, true, _, _, _);
-        await canEditPremissions(message, false);
-        expect(message.channel.send).not.toBeCalledWith(expect.stringMatching(/\S* can no longer edit his Steam ID/));
+        try {
+            await canEditPremissions(message, false);
+        } catch (e) {
+            if (e instanceof DBotError) {
+                HandleDBotError(e);
+            }
+            expect(message.channel.send).not.toBeCalledWith(
+                expect.stringMatching(/\S* can no longer edit his Steam ID/)
+            );
+        }
     });
 
     it('Should return message if everything passed correctly', async () => {
-        jest.spyOn(getUserFromMention, 'default').mockImplementation(async () => {
+        jest.spyOn(discordService, 'getUserFromMention').mockImplementation(async () => {
             return {
                 _id: '601339f597a6a523bce68c7a',
                 __v: 0,
@@ -54,6 +76,8 @@ export default () => {
         });
         const message = messageFactory(_, true, _, '629255459454320640', '786141154021867521');
         await canEditPremissions(message, false);
-        expect(message.channel.send).toBeCalledWith(expect.stringMatching(/\S* can no longer edit his Steam ID/));
+        expect(message.channel.send).toBeCalledWith(
+            expect.stringMatching(/\S* can no longer edit his Steam ID/)
+        );
     });
 };
