@@ -88,7 +88,7 @@ class DiscordService {
         return `${nickname} ${rankInBracers}`;
     }
 
-    async updateNickname(member: GuildMember, user: IUser) {
+    async updateRankInNickname(member: GuildMember, user: IUser) {
         if (!member) {
             loggerService.error(
                 `${parse(user.nickname, THEMES.NICKNAME_STYLE)} is not present at current guild`
@@ -103,8 +103,8 @@ class DiscordService {
         try {
             const nicknameWithRank = this.formatNickname(user.nickname, rank);
             if (member.nickname === nicknameWithRank) {
-                // skip here and log message that it was skipped
-                // due not to spam into audit log
+                loggerService.warning(`${user.nickname}'s rank have not been changed, skipping`);
+                return;
             }
             await member.setNickname(nicknameWithRank, 'Nickname changed due to rank update');
             loggerService.log(

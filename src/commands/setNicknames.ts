@@ -46,6 +46,6 @@ export default async function setNicknames(
     });
     for (const user of users) {
         const fetchedMember = await discordService.fetchMember(currentGuild, user.discordID);
-        await discordService.updateNickname(fetchedMember, user);
+        await discordService.updateRankInNickname(fetchedMember, user);
     }
 }
