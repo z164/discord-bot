@@ -58,7 +58,7 @@ export default async function messageHandle(message: Message): Promise<void> {
                 await editOwnSteam32ID(message, body);
                 break;
             case 'help':
-                await help(message.channel);
+                await help(message);
                 break;
             case 'lock':
                 await canEditPermissionsSet(message, false);
