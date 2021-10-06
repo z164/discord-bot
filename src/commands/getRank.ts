@@ -2,21 +2,16 @@ import {Message} from 'discord.js';
 
 import dota from '../dota';
 import IProfileData from '../interfaces/profileData';
+import discordService from '../services/discordService';
 import loggerService from '../services/loggerService';
 
 import parseRank from './util/parseRank';
 
-import validateSteam32ID from './util/validateSteam32ID';
-
-export default async function getRank(message: Message, body: Array<string>): Promise<void> {
+export default async function getRank(message: Message, body: string[]): Promise<void> {
     loggerService.title('getRank');
-    const steam32ID = validateSteam32ID(body.join(' '));
-    if (!steam32ID) {
-        loggerService.error('Invalid body provided');
-        loggerService.separator();
-        message.channel.send('Invalid body provided');
-        return;
-    }
+    const bodyString = body.join(' ').trim();
+    discordService.isSteam32IDExists(message, bodyString);
+    const steam32ID = discordService.validateSteam32ID(message, bodyString);
     const profileData: IProfileData = await dota.getProfile(steam32ID);
     if (profileData.rank_tier === null) {
         loggerService.error('Bad profile provided');

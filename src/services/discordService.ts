@@ -3,19 +3,22 @@ import * as dotenv from 'dotenv';
 
 import loggerService from './loggerService';
 import fetcherService, {FetcherService} from './fetcherService';
+import steam32IDService, {Steam32IDService} from './steam32IDService';
 
 import DBotError from '../entities/errors/DBotError';
-import User, {IUser} from '../entities/User';
 
+import User, {IUser} from '../entities/User';
 import {parse, THEMES} from '../commands/util/logUtilities';
 
 dotenv.config();
 
 class DiscordService {
     private readonly fetcherService: FetcherService;
+    private readonly steam32IDService: Steam32IDService;
 
     constructor() {
         this.fetcherService = fetcherService;
+        this.steam32IDService = steam32IDService;
     }
 
     isAdmin(message: Message): void {
@@ -47,6 +50,14 @@ class DiscordService {
 
     async fetchMember(guild: Guild, memberID: string) {
         return this.fetcherService.fetchMemberFromGuild(guild, memberID);
+    }
+
+    validateSteam32ID(message: Message, steam32ID: string) {
+        return this.steam32IDService.validateSteam32ID(message, steam32ID);
+    }
+
+    isSteam32IDExists(message: Message, steam32ID: string) {
+        return this.steam32IDService.isSteam32IDExists(message, steam32ID);
     }
 
     async sendMessage(message: Message, messageToSend: string): Promise<Message> {

@@ -3,7 +3,6 @@ import {Message} from 'discord.js';
 import User from '../repository/User';
 
 import {parse, THEMES} from './util/logUtilities';
-import validateSteam32ID from './util/validateSteam32ID';
 import loggerService from '../services/loggerService';
 import discordService from '../services/discordService';
 
@@ -14,13 +13,8 @@ export default async (message: Message, body: string[]): Promise<void> => {
     discordService.isAdmin(message);
     body.shift();
     const bodyStr = body.join(' ').trim();
-    const steam32ID = validateSteam32ID(bodyStr);
-    if (!steam32ID) {
-        loggerService.error('Bad ID provided');
-        loggerService.separator();
-        message.channel.send('Please provide valid Steam32 ID');
-        return;
-    }
+    discordService.isSteam32IDExists(message, bodyStr);
+    const steam32ID = discordService.validateSteam32ID(message, bodyStr);
     const user = await discordService.getUserFromMention(message);
     const res = await User.updateOne(
         {guildID: user.guildID, discordID: user.discordID},

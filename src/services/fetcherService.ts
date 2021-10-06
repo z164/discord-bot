@@ -114,7 +114,6 @@ export class FetcherService {
         try {
             return await guild.members.fetch(memberID);
         } catch {
-            console.log('qwe');
             return null;
         }
     }
