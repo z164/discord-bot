@@ -6,6 +6,8 @@ import {IUser} from '../../entities/User';
 import User from '../../repository/User';
 
 import messageFactory from '../mocks/mockMessageFactory';
+import DBotError from '../../entities/errors/DBotError';
+import HandleDBotError from '../../handlers/dBotErrorHandler';
 
 const _: undefined = undefined;
 
@@ -25,8 +27,14 @@ export default () => {
             } as unknown as IUser;
         });
         const message = messageFactory(_);
-        await editOwnSteam32ID(message, ['']);
-        expect(message.channel.send).toBeCalledWith('No Steam 32ID provided');
+        try {
+            await editOwnSteam32ID(message, ['']);
+        } catch (e) {
+            if (e instanceof DBotError) {
+                HandleDBotError(e);
+            }
+            expect(message.channel.send).toBeCalledWith('No Steam 32ID provided');
+        }
     });
     it('Should return message if user is banned from editing his Steam 32ID', async () => {
         jest.spyOn(discordService, 'getAuthorAsUser').mockImplementation(async () => {

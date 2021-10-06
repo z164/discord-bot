@@ -6,6 +6,10 @@ import setNicknames from '../../commands/setNicknames';
 import {IGuild} from '../../entities/Guild';
 
 export default async function ReadyHandler(): Promise<void> {
+    client.user.setActivity({
+        name: 'github.com/z164',
+        type: 'WATCHING',
+    });
     schedule.scheduleJob(
         {
             minute: 30,

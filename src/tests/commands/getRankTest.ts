@@ -5,14 +5,22 @@ import getRank from '../../commands/getRank';
 import messageFactory from '../mocks/mockMessageFactory';
 
 import IProfileData from '../../interfaces/profileData';
+import DBotError from '../../entities/errors/DBotError';
+import HandleDBotError from '../../handlers/dBotErrorHandler';
 
 const _: undefined = undefined;
 
 export default () => {
     it('Should return message if Steam 32ID is invalid', async () => {
         const message = messageFactory(_);
-        await getRank(message, ['']);
-        expect(message.channel.send).toBeCalledWith('Invalid body provided');
+        try {
+            await getRank(message, ['']);
+        } catch (e) {
+            if (e instanceof DBotError) {
+                HandleDBotError(e);
+            }
+            expect(message.channel.send).toBeCalledWith('No Steam 32ID provided');
+        }
     });
     it('Should return message if profile is invalid', async () => {
         jest.spyOn(dota, 'getProfile').mockImplementation(async () => {
@@ -21,8 +29,8 @@ export default () => {
             } as unknown as IProfileData;
         });
         const message = messageFactory(_);
-        await getRank(message, ['invalid']);
-        expect(message.channel.send).toBeCalledWith('Invalid body provided');
+        await getRank(message, ['123123123']);
+        expect(message.channel.send).toBeCalledWith('Bad profile');
     });
     it('Should return message if profile is correct for leaderboard rank', async () => {
         jest.spyOn(dota, 'getProfile').mockImplementation(async () => {
