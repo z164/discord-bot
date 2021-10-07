@@ -1,4 +1,5 @@
 import mongo from '../mongo';
+import discord from '../discord';
 import fillGuilds from './mocks/fillGuilds';
 import fillUsers from './mocks/fillUsers';
 
@@ -51,5 +52,6 @@ describe('Tests', () => {
     afterAll(async () => {
         await mongo.getClient().connection.db.dropDatabase();
         await mongo.disconnect();
+        await discord.disconnect();
     });
 });

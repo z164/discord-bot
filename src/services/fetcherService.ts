@@ -13,8 +13,6 @@ import guildDelete from '../commands/util/guildDelete';
 import parseRank from '../commands/util/parseRank';
 
 export class FetcherService {
-    constructor() {}
-
     isGuildOwner(idToCheck: string, message: Message): string {
         if (idToCheck === message.guild.ownerID) {
             loggerService.warning("User is a guild owner. Using bot's id to proceed");

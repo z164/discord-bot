@@ -14,7 +14,7 @@ import DBotError from '../entities/errors/DBotError';
 export default async (message: Message, body: string[]): Promise<void> => {
     loggerService.title('Register');
     let discordID = message.member.user.id;
-    let bodyStr = body.join(' ').trim();
+    const bodyStr = body.join(' ').trim();
     const nickname = message.member.nickname ?? message.member.user.username;
     const guildID = message.guild.id;
     const guildName = message.guild.name;

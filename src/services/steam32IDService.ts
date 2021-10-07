@@ -14,6 +14,7 @@ export class Steam32IDService {
         }
         return Number(steam32ID);
     }
+
     isSteam32IDExists(message: Message, steam32ID: string): void {
         if (steam32ID === '') {
             throw new DBotError({

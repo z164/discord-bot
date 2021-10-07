@@ -14,6 +14,7 @@ dotenv.config();
 
 class DiscordService {
     private readonly fetcherService: FetcherService;
+
     private readonly steam32IDService: Steam32IDService;
 
     constructor() {
@@ -79,7 +80,7 @@ class DiscordService {
         if (finalLength > MAX_NICKNAME_LENGTH) {
             const allowedNicknameLength =
                 MAX_NICKNAME_LENGTH - DOTS_LENGTH - SPACE_LENGTH - rankInBracersLength;
-            const nicknameCut = nickname.slice(0, allowedNicknameLength) + '...';
+            const nicknameCut = `${nickname.slice(0, allowedNicknameLength)}...`;
             loggerService.warning(
                 `${nickname}'s nickname was too big.\nIt have been cutted to ${nicknameCut}`
             );
