@@ -51,8 +51,16 @@ export default () => {
             } as unknown as IUser;
         });
         const message = messageFactory(_);
-        await editOwnSteam32ID(message, ['123562416']);
-        expect(message.channel.send).toBeCalledWith('You were banned from editing your Steam ID');
+        try {
+            await editOwnSteam32ID(message, ['123562416']);
+        } catch (e) {
+            if (e instanceof DBotError) {
+                HandleDBotError(e);
+            }
+            expect(message.channel.send).toBeCalledWith(
+                'You were banned from editing your Steam ID'
+            );
+        }
     });
     it('Should return message if everything was provided correctly', async () => {
         jest.spyOn(discordService, 'getAuthorAsUser').mockImplementation(async () => {

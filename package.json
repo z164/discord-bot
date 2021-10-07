@@ -10,8 +10,8 @@
         "start": "NODE_ENV=development npx ts-node src/index.ts",
         "start:dev": "NODE_ENV=development npx ts-node-dev src/index.ts",
         "start:prod": "NODE_ENV=production node dist/index.js",
-        "test": "npx jest --forceExit",
-        "test:cov": "npx jest --coverage --forceExit",
+        "test": "npx jest",
+        "test:cov": "npx jest --coverage",
         "build": "npx tsc --build",
         "prettier": "npx prettier -w src",
         "eslint": "npx eslint ."
