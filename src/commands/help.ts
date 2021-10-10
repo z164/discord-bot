@@ -10,7 +10,7 @@ export default async (message: Message): Promise<void> => {
     );
     discordService.sendMessage(
         message,
-        'Feedback: **@z164#6241**\nGithub page: https://github.com/z164/discord-bot\nSmiley face :)\n\n(still beta, would be improved)'
+        'Feedback: **@z164#6241**\nGithub page: https://github.com/z164/discord-bot'
     );
     loggerService.log('Help was sent');
     loggerService.separator();
