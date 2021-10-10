@@ -11,6 +11,7 @@ export interface UserObj {
     guildID: Types.ObjectId;
     discordID: string;
     nickname: string;
+    nicknameNotShortened?: string;
     steam32ID: number;
     steam64ID: number;
     canEdit: boolean;
@@ -25,6 +26,9 @@ const userSchema: Schema = new Schema({
         type: String,
     },
     nickname: {
+        type: String,
+    },
+    nicknameNotShortened: {
         type: String,
     },
     steam32ID: {

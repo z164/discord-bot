@@ -3,11 +3,13 @@ import {client} from '../../discord';
 
 import updateNickname from '../../commands/util/updateNickname';
 import loggerService from '../../services/loggerService';
+import User from '../../repository/User';
+import {Types} from 'mongoose';
 
-export default function guildMemberUpdateHandle(
+export default async function guildMemberUpdateHandle(
     oldMember: GuildMember | PartialGuildMember,
     newMember: GuildMember
-): void {
+): Promise<void> {
     let userID = newMember.user.id;
     if (newMember.user.id === newMember.guild.ownerID) {
         userID = client.user.id;
@@ -19,6 +21,9 @@ export default function guildMemberUpdateHandle(
     const newNicknameCut = newNickname.replace(rankRegexp, '');
     const oldNicknameCut = oldNickname.replace(rankRegexp, '');
     if (newNicknameCut !== oldNicknameCut && newMember.user.id !== client.user.id) {
+        await User.updateOne(Types.ObjectId(userID), {
+            nicknameNotShortened: null,
+        });
         loggerService.title('Member update');
         loggerService.log('Nickname was updated due to change');
         loggerService.separator();
