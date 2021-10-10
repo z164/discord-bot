@@ -12,7 +12,8 @@ export class NicknameService {
         this.fetcherService = fetcherService;
     }
 
-    formatNickname(nickname: string, rank: string): string {
+    async formatNickname(user: IUser, rank: string): Promise<string> {
+        const {nickname} = user;
         const MAX_NICKNAME_LENGTH = 32;
         const DOTS_LENGTH = 3;
         const SPACE_LENGTH = 1;
@@ -24,6 +25,9 @@ export class NicknameService {
             const allowedNicknameLength =
                 MAX_NICKNAME_LENGTH - DOTS_LENGTH - SPACE_LENGTH - rankInBracersLength;
             const nicknameCut = `${nickname.slice(0, allowedNicknameLength)}...`;
+            await User.updateOne(user._id, {
+                nicknameNotShortened: nickname,
+            });
             loggerService.warning(
                 `${nickname}'s nickname was too big.\nIt have been cutted to ${nicknameCut}`
             );
@@ -45,7 +49,7 @@ export class NicknameService {
         }
         const rank = await this.fetcherService.fetchRank(user);
         try {
-            const nicknameWithRank = this.formatNickname(user.nickname, rank);
+            const nicknameWithRank = await this.formatNickname(user, rank);
             if (member.nickname === nicknameWithRank) {
                 loggerService.warning(`${user.nickname}'s rank have not been changed, skipping`);
                 return;
