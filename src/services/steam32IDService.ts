@@ -16,7 +16,7 @@ export class Steam32IDService {
     }
 
     isSteam32IDExists(message: Message, steam32ID: string): void {
-        if (steam32ID === '') {
+        if (!steam32ID.length) {
             throw new DBotError({
                 messageToLog: 'No Steam 32ID provided',
                 messageToSend: 'No Steam 32ID provided',

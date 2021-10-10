@@ -10,6 +10,7 @@ import fetch64ID from './util/fetch64ID';
 import loggerService from '../services/loggerService';
 import discordService from '../services/discordService';
 import DBotError from '../entities/errors/DBotError';
+import steam32IDService from '../services/steam32IDService';
 
 export default async (message: Message, body: string[]): Promise<void> => {
     loggerService.title('Register');
@@ -18,8 +19,8 @@ export default async (message: Message, body: string[]): Promise<void> => {
     const nickname = message.member.nickname ?? message.member.user.username;
     const guildID = message.guild.id;
     const guildName = message.guild.name;
-    discordService.isSteam32IDExists(message, bodyStr);
-    const steam32ID = discordService.validateSteam32ID(message, bodyStr);
+    steam32IDService.isSteam32IDExists(message, bodyStr);
+    const steam32ID = steam32IDService.validateSteam32ID(message, bodyStr);
     if (message.author.id === message.guild.ownerID) {
         loggerService.warning(
             `${parse(nickname, THEMES.NICKNAME_STYLE)} is a guild owner. Using bot's id to proceed`
@@ -69,7 +70,8 @@ export default async (message: Message, body: string[]): Promise<void> => {
         )}`
     );
     loggerService.separator();
-    message.channel.send(
+    discordService.sendMessage(
+        message,
         `Registered successfully:\nID: ${discordID}\nGuildID: ${guild.guildID}\nNickname: ${nickname}\nSteam32ID: ${steam32ID}`
     );
 };

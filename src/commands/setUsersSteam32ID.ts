@@ -5,6 +5,7 @@ import User from '../repository/User';
 import {parse, THEMES} from './util/logUtilities';
 import loggerService from '../services/loggerService';
 import discordService from '../services/discordService';
+import steam32IDService from '../services/steam32IDService';
 
 // import fetch64ID from './util/fetch64ID';
 
@@ -13,8 +14,8 @@ export default async (message: Message, body: string[]): Promise<void> => {
     discordService.isAdmin(message);
     body.shift();
     const bodyStr = body.join(' ').trim();
-    discordService.isSteam32IDExists(message, bodyStr);
-    const steam32ID = discordService.validateSteam32ID(message, bodyStr);
+    steam32IDService.isSteam32IDExists(message, bodyStr);
+    const steam32ID = steam32IDService.validateSteam32ID(message, bodyStr);
     const user = await discordService.getUserFromMention(message);
     const res = await User.updateOne(
         {guildID: user.guildID, discordID: user.discordID},

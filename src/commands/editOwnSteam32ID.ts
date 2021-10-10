@@ -5,13 +5,14 @@ import User from '../repository/User';
 import loggerService from '../services/loggerService';
 import discordService from '../services/discordService';
 import DBotError from '../entities/errors/DBotError';
+import steam32IDService from '../services/steam32IDService';
 
 export default async (message: Message, body: string[]): Promise<void> => {
     loggerService.title('Edit');
     const bodyStr = body.join(' ').trim();
     const user = await discordService.getAuthorAsUser(message);
-    discordService.isSteam32IDExists(message, bodyStr);
-    const steam32ID = discordService.validateSteam32ID(message, bodyStr);
+    steam32IDService.isSteam32IDExists(message, bodyStr);
+    const steam32ID = steam32IDService.validateSteam32ID(message, bodyStr);
     if (!user.canEdit) {
         throw new DBotError({
             messageToLog: 'User that invoked this command is banned from editing his Steam ID',

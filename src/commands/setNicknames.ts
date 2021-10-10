@@ -8,6 +8,7 @@ import Guild from '../repository/Guild';
 import {parse, THEMES} from './util/logUtilities';
 import loggerService from '../services/loggerService';
 import DBotError from '../entities/errors/DBotError';
+import nicknameService from '../services/nicknameService';
 // import fetch64ID from './util/fetch64ID';
 
 export default async function setNicknames(
@@ -46,6 +47,6 @@ export default async function setNicknames(
     });
     for (const user of users) {
         const fetchedMember = await discordService.fetchMember(currentGuild, user.discordID);
-        await discordService.updateRankInNickname(fetchedMember, user);
+        await nicknameService.updateRankInNickname(fetchedMember, user);
     }
 }
