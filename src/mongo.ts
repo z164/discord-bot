@@ -18,7 +18,7 @@ class Mongo {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
                 useFindAndModify: false,
-            }
+            },
         );
     }
 

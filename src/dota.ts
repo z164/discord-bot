@@ -25,7 +25,7 @@ class Dota {
     }
 
     async getProfile(
-        id: number
+        id: number,
         // | number[]
     ): Promise<IProfileData> {
         // if(Array.isArray(id)) {
@@ -66,10 +66,10 @@ class Dota {
                                     reject(err);
                                 }
                                 resolve(update);
-                            }
+                            },
                         );
                     }
-                }
+                },
             );
         });
     }

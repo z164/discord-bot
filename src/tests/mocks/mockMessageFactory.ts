@@ -5,7 +5,7 @@ export default (
     administrator = false,
     id = 'test',
     guildID = 'test',
-    mentionID = 'test'
+    mentionID = 'test',
 ): Message => {
     return {
         author: {

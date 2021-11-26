@@ -34,7 +34,7 @@ export default () => {
             }
             expect(message.member.hasPermission).toBeCalled();
             expect(message.channel.send).toBeCalledWith(
-                'You need administrator permissions on server to do this'
+                'You need administrator permissions on server to do this',
             );
         }
     });
@@ -55,7 +55,7 @@ export default () => {
                 HandleDBotError(e);
             }
             expect(message.channel.send).not.toBeCalledWith(
-                expect.stringMatching(/\S* can no longer edit his Steam ID/)
+                expect.stringMatching(/\S* can no longer edit his Steam ID/),
             );
         }
     });
@@ -77,7 +77,7 @@ export default () => {
         const message = messageFactory(_, true, _, '629255459454320640', '786141154021867521');
         await canEditPremissions(message, false);
         expect(message.channel.send).toBeCalledWith(
-            expect.stringMatching(/\S* can no longer edit his Steam ID/)
+            expect.stringMatching(/\S* can no longer edit his Steam ID/),
         );
     });
 };

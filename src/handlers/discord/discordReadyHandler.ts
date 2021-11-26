@@ -19,6 +19,6 @@ export default async function ReadyHandler(): Promise<void> {
             for (const guild of guilds) {
                 await setNicknames(client, guild.guildID);
             }
-        }
+        },
     );
 }

@@ -10,8 +10,8 @@ export default async (message: Message): Promise<void> => {
     loggerService.log(
         `${parse(user.nickname, THEMES.NICKNAME_STYLE)}'s Steam ID is ${parse(
             String(user.steam32ID),
-            THEMES.NICKNAME_STYLE
-        )}`
+            THEMES.NICKNAME_STYLE,
+        )}`,
     );
     loggerService.separator();
     await discordService.sendMessage(message, `${user.nickname}'s Steam ID is ${user.steam32ID}`);

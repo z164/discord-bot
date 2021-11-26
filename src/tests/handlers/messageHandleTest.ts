@@ -26,7 +26,7 @@ export default () => {
         expect(
             await User.findOne({
                 steam32ID: 111111111,
-            })
+            }),
         ).toHaveProperty('_id');
     });
 };

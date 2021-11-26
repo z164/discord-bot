@@ -3,7 +3,7 @@ import ranks from './ranks';
 import IProfileData from '../../interfaces/profileData';
 
 export default function parseRank(
-    profileData: IProfileData
+    profileData: IProfileData,
     // | IProfileData[]
 ): string {
     //  | {account_id: number; rank: number | string}[]

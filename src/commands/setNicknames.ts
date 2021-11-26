@@ -14,7 +14,7 @@ import nicknameService from '../services/nicknameService';
 export default async function setNicknames(
     client: Client,
     guildID: string,
-    message: Message = null
+    message: Message = null,
 ): Promise<void> {
     loggerService.title('Update');
     if (message !== null) {

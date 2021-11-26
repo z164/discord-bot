@@ -29,21 +29,21 @@ export class NicknameService {
                 nicknameNotShortened: nickname,
             });
             loggerService.warning(
-                `${nickname}'s nickname was too big.\nIt have been cutted to ${nicknameCut}`
+                `${nickname}'s nickname was too big.\nIt have been cutted to ${nicknameCut}`,
             );
             return `${nicknameCut} ${rankInBracers}`;
         }
         return `${nickname} ${rankInBracers}`;
     }
 
-    async updateRankInNickname(member: GuildMember, user: IUser) {
+    async updateRankInNickname(member: GuildMember, user: IUser): Promise<void> {
         if (!member) {
             loggerService.error(
-                `${parse(user.nickname, THEMES.NICKNAME_STYLE)} is not present at current guild`
+                `${parse(user.nickname, THEMES.NICKNAME_STYLE)} is not present at current guild`,
             );
             await User.deleteOne(user._id);
             loggerService.warning(
-                `${parse(user.nickname, THEMES.NICKNAME_STYLE)} is removed from database`
+                `${parse(user.nickname, THEMES.NICKNAME_STYLE)} is removed from database`,
             );
             return;
         }
@@ -58,11 +58,11 @@ export class NicknameService {
             loggerService.log(
                 `${loggerService.styleString(
                     user.nickname,
-                    THEMES.NICKNAME_STYLE
+                    THEMES.NICKNAME_STYLE,
                 )}'s rank was updated to ${loggerService.styleString(
                     String(rank),
-                    THEMES.NICKNAME_STYLE
-                )}`
+                    THEMES.NICKNAME_STYLE,
+                )}`,
             );
         } catch (error) {
             if (error instanceof DiscordAPIError) {

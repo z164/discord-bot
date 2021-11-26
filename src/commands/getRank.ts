@@ -2,7 +2,6 @@ import {Message} from 'discord.js';
 
 import dota from '../dota';
 import IProfileData from '../interfaces/profileData';
-import discordService from '../services/discordService';
 import loggerService from '../services/loggerService';
 import steam32IDService from '../services/steam32IDService';
 

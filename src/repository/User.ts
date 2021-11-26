@@ -30,7 +30,7 @@ class User {
 
     async create(
         user: UserObj,
-        callback?: (err: NativeError, doc: IUser) => void
+        callback?: (err: NativeError, doc: IUser) => void,
     ): Promise<IUser | void> {
         if (callback) {
             return this.model.create(user, callback);

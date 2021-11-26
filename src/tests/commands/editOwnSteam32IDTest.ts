@@ -58,7 +58,7 @@ export default () => {
                 HandleDBotError(e);
             }
             expect(message.channel.send).toBeCalledWith(
-                'You were banned from editing your Steam ID'
+                'You were banned from editing your Steam ID',
             );
         }
     });

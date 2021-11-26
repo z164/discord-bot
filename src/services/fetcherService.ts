@@ -99,7 +99,7 @@ export class FetcherService {
             throw new DBotError({
                 messageToLog: `Couldnt reach ${parse(
                     guildID,
-                    THEMES.NICKNAME_STYLE
+                    THEMES.NICKNAME_STYLE,
                 )} guild, removing it from database`,
                 type: 'error',
                 layer: this.constructor.name,

@@ -15,7 +15,7 @@ export default () => {
             HandleDBotError(e);
             expect(e.messageToLog).toBe('User invoked this command from non-existing in DB guild');
             expect(message.channel.send).toBeCalledWith(
-                "None of this guild's members are registered in system. Please register before using this command"
+                "None of this guild's members are registered in system. Please register before using this command",
             );
         });
     });
