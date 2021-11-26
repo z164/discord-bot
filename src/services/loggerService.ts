@@ -15,7 +15,7 @@ class LoggerService {
         message: string,
         font: string,
         background: string,
-        styles?: string[]
+        styles?: string[],
     ): string {
         let stylesString = '';
         if (styles) {
@@ -32,20 +32,20 @@ class LoggerService {
                 return this.buildThemeString(
                     message,
                     loggerServiceConstants.FONTCOLOR.White,
-                    loggerServiceConstants.BGCOLOR.BgRed
+                    loggerServiceConstants.BGCOLOR.BgRed,
                 );
             case THEMES.LOG:
                 return this.buildThemeString(
                     message,
                     loggerServiceConstants.FONTCOLOR.White,
-                    loggerServiceConstants.BGCOLOR.BgGreen
+                    loggerServiceConstants.BGCOLOR.BgGreen,
                 );
             case THEMES.WARNING:
                 return this.buildThemeString(
                     message,
                     loggerServiceConstants.FONTCOLOR.Black,
                     loggerServiceConstants.BGCOLOR.BgYellow,
-                    [loggerServiceConstants.STYLES.Bright]
+                    [loggerServiceConstants.STYLES.Bright],
                 );
             case THEMES.TITLE:
             case THEMES.NICKNAME_STYLE:
@@ -58,7 +58,7 @@ class LoggerService {
                     loggerServiceConstants.STYLES.Bright,
                 ]);
             default:
-                break;
+                return message;
         }
     }
 
@@ -66,14 +66,12 @@ class LoggerService {
         if (!this.properties.colors) {
             return `[${moment(new Date()).format('H:mm:ss')}]${message}`;
         }
-        return (
-            `[${this.buildThemeString(
-                moment(new Date()).format('H:mm:ss'),
-                loggerServiceConstants.FONTCOLOR.Magenta,
-                '',
-                []
-            )}]` + `[${message}]`
-        );
+        return `[${this.buildThemeString(
+            moment(new Date()).format('H:mm:ss'),
+            loggerServiceConstants.FONTCOLOR.Magenta,
+            '',
+            [],
+        )}][${message}]`;
     }
 
     private logWithProperties(message: string, layer: boolean, theme: THEMES): void {
@@ -112,7 +110,7 @@ class LoggerService {
         this.logWithProperties(
             '----------------------------',
             this.properties.layers.separator,
-            THEMES.SEPARATOR
+            THEMES.SEPARATOR,
         );
     }
 }

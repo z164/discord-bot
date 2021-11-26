@@ -1,14 +1,14 @@
 import {GuildMember, PartialGuildMember} from 'discord.js';
+import {Types} from 'mongoose';
 import {client} from '../../discord';
 
 import updateNickname from '../../commands/util/updateNickname';
 import loggerService from '../../services/loggerService';
 import User from '../../repository/User';
-import {Types} from 'mongoose';
 
 export default async function guildMemberUpdateHandle(
     oldMember: GuildMember | PartialGuildMember,
-    newMember: GuildMember
+    newMember: GuildMember,
 ): Promise<void> {
     let userID = newMember.user.id;
     if (newMember.user.id === newMember.guild.ownerID) {

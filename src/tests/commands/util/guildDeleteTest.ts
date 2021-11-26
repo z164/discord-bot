@@ -7,20 +7,20 @@ export default () => {
         expect(
             await Guild.findOne({
                 guildID: '861618895818850305',
-            })
+            }),
         ).toBeTruthy();
         await guildDelete('861618895818850305');
         expect(
             await Guild.findOne({
                 guildID: '861618895818850305',
-            })
+            }),
         ).toBeFalsy();
     });
     it("Should cleanup guild's users if guild was deleted", async () => {
         expect(
             await User.findMany({
                 guildID: '60f005d6a24baa54084c1ff6',
-            })
+            }),
         ).toHaveLength(0);
     });
 };

@@ -19,7 +19,7 @@ export default async (message: Message, body: string[]): Promise<void> => {
     const user = await discordService.getUserFromMention(message);
     const res = await User.updateOne(
         {guildID: user.guildID, discordID: user.discordID},
-        {steam32ID}
+        {steam32ID},
     );
     if (res === null) {
         loggerService.error('Mentioned user is not registered in system');
@@ -29,8 +29,8 @@ export default async (message: Message, body: string[]): Promise<void> => {
         loggerService.log(
             `Changed ${parse(res.nickname, THEMES.NICKNAME_STYLE)}'s Steam32 ID to ${parse(
                 bodyStr,
-                THEMES.NICKNAME_STYLE
-            )}`
+                THEMES.NICKNAME_STYLE,
+            )}`,
         );
         loggerService.separator();
         message.channel.send(`Changed ${res.nickname}'s Steam32 ID to ${bodyStr}`);

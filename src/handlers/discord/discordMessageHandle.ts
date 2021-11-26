@@ -31,11 +31,11 @@ export default async function messageHandle(message: Message): Promise<void> {
     console.log(
         body.join(' ').trim() === ''
             ? parse('No body provided', THEMES.WARNING)
-            : `${parse('Body', THEMES.PROPERTY)}: ${body.join(' ').trim()}`
+            : `${parse('Body', THEMES.PROPERTY)}: ${body.join(' ').trim()}`,
     );
     if (message.channel instanceof DMChannel) {
         loggerService.warning(
-            `${message.channel.recipient.username}#${message.channel.recipient.discriminator} tried to DM bot`
+            `${message.channel.recipient.username}#${message.channel.recipient.discriminator} tried to DM bot`,
         );
         loggerService.separator();
         message.channel.send('DMs are currently not supported');

@@ -14,13 +14,13 @@ export default async (message: Message, parameter: boolean): Promise<void> => {
     loggerService.log(
         `${parse(userUpdated.nickname, THEMES.NICKNAME_STYLE)} ${
             parameter ? 'can now edit his Steam ID' : 'can no longer edit his Steam ID'
-        }`
+        }`,
     );
     loggerService.separator();
     await discordService.sendMessage(
         message,
         `${userUpdated.nickname} ${
             parameter ? 'can now edit his Steam ID' : 'can no longer edit his Steam ID'
-        }`
+        }`,
     );
 };

@@ -23,7 +23,7 @@ export default async (message: Message, body: string[]): Promise<void> => {
     const steam32ID = steam32IDService.validateSteam32ID(message, bodyStr);
     if (message.author.id === message.guild.ownerID) {
         loggerService.warning(
-            `${parse(nickname, THEMES.NICKNAME_STYLE)} is a guild owner. Using bot's id to proceed`
+            `${parse(nickname, THEMES.NICKNAME_STYLE)} is a guild owner. Using bot's id to proceed`,
         );
         discordID = message.guild.me.id;
     }
@@ -66,12 +66,12 @@ export default async (message: Message, body: string[]): Promise<void> => {
     loggerService.log(
         `${parse(nickname, THEMES.NICKNAME_STYLE)} registered successfully with id ${parse(
             String(steam32ID),
-            THEMES.NICKNAME_STYLE
-        )}`
+            THEMES.NICKNAME_STYLE,
+        )}`,
     );
     loggerService.separator();
     discordService.sendMessage(
         message,
-        `Registered successfully:\nID: ${discordID}\nGuildID: ${guild.guildID}\nNickname: ${nickname}\nSteam32ID: ${steam32ID}`
+        `Registered successfully:\nID: ${discordID}\nGuildID: ${guild.guildID}\nNickname: ${nickname}\nSteam32ID: ${steam32ID}`,
     );
 };

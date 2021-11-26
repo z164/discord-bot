@@ -36,6 +36,8 @@
         "no-await-in-loop": "off",
         "class-methods-use-this": "off",
         "import/no-cycle": "off",
-        "no-restricted-syntax": "off"
+        "no-restricted-syntax": "off",
+        "operator-linebreak": "off",
+        "object-curly-newline": "off"
     }
 }

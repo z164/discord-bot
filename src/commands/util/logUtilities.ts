@@ -30,6 +30,6 @@ export const separator = parse('----------------------------', THEMES.SEPARATOR)
 
 export const title = (titleName: string) => {
     console.log(
-        `[${moment(new Date()).format('H:mm:ss').magenta}][${parse(titleName, THEMES.TITLE)}]`
+        `[${moment(new Date()).format('H:mm:ss').magenta}][${parse(titleName, THEMES.TITLE)}]`,
     );
 };
